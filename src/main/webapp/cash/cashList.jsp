@@ -53,7 +53,7 @@
 	// Model 호출 : 일별 cash 목록
 	CashDao cashDao = new CashDao();
 	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(year, month+1);
-
+	
 	// View : 달력 출력 + 일별 cash 목록 출력
 %>
 
@@ -107,6 +107,9 @@
 		<%
 			for(HashMap<String, Object> m : list) {
 		%>
+				<%=(Integer)m.get("cashNo") %>
+				<%=(String)m.get("cashNo") %>
+				<%=(Integer)m.get("cashNo") %>
 				<%=(Integer)m.get("cashNo") %>
 		<%
 			}
