@@ -49,6 +49,17 @@ public class MemberDao {
 		Connection conn = DriverManager.getConnection()"jdbc..";
 		*/
 	
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "INSERT INTO member(member_id, member_pw, member_name) values(?, ?, ?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, paramMember.getMemberId());
+		stmt.setString(2, paramMember.getMemberPw());
+		stmt.setString(3, paramMember.getMemberName());
+		resultRow = stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
 		return resultRow;
 	}
 }

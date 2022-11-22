@@ -8,5 +8,4 @@ public class DBUtil {
 		Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook", "root", "java1234");
 		return conn; 
 	}
-
 }

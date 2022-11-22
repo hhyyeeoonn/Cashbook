@@ -1,11 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
-<%@ page import = "java.sql.*" %>
 <%@ page import = "java.util.*" %>
 <%@ page import = "dao.*" %>
 
 <%
 	// Controller : session, request
+	if(session.getAttribute("loginMember") == null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}
+
+
+	// session안에 저장된 멤버(현재 로그인 사용자) 
+	Member loginMember = (Member)session.getAttribute("loginMember");
+	
 	// request 년 + 월
 	int year = 0; 
 	int month = 0;
@@ -37,6 +45,7 @@
 	int firstDay = targetDate.get(Calendar.DAY_OF_WEEK);
 	// beginBlank 개수는 firstDat-1
 	
+	
 	// 마지막 날짜
 	int lastDate = targetDate.getActualMaximum(Calendar.DATE);	
 	
@@ -50,9 +59,10 @@
 	// 전체 td의 개수 : 7로 나누어 떨어져야 한다
 	int totalTd = beginBlank + lastDate + endBlank; 
 	
+	
 	// Model 호출 : 일별 cash 목록
 	CashDao cashDao = new CashDao();
-	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(year, month+1);
+	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
 	
 	// View : 달력 출력 + 일별 cash 목록 출력
 %>
@@ -70,7 +80,9 @@
 	</div>
 	
 	<div>
-		<%=year%>년 <%=month + 1%> 월 
+		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">[<-이전달]</a>
+		<%=year%>년 <%=month + 1%>월 
+		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">[다음달->]</a>
 	</div>
 	<div>
 		<!-- 달력 -->
@@ -87,10 +99,28 @@
 					int date = i-beginBlank;
 					if(date > 0 && date <= lastDate) {
 		%>
-					<%=date %>
-		<%
-				}
-		%>
+					<div>
+						<a href="<%=request.getContextPath()%>/cash/cashDateList.jsp?year=<%=year%>&month=<%=month+1%>&date=<%=date%>"><%=date%></a>
+					</div>
+					<div>
+						<%
+							for(HashMap<String, Object> m:list) {
+								String cashDate=(String)(m.get("cashDate"));
+								if(Integer.parseInt(cashDate.substring(8)) == date) {
+						%>
+									[<%=(String)(m.get("categoryKind"))%>]  <!-- object타입으로 들어가있어서 형변환필요 -->
+									<%=(String)(m.get("categoryName"))%>
+									&nbsp;
+									<%=(Long)(m.get("cashPrice"))%>원
+									<br>
+									
+						<%
+								}
+							}
+						}
+							System.out.println(date);
+						%>
+					</div>
 				</td>
 		<% 
 				if(i % 7 == 0 && i != totalTd) {
@@ -101,20 +131,8 @@
 			}
 		%>
 			</tr>
+			<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
 		</table>
 	</div>
-	<div>
-		<%
-			for(HashMap<String, Object> m : list) {
-		%>
-				<%=(Integer)m.get("cashNo") %>
-				<%=(String)m.get("cashNo") %>
-				<%=(Integer)m.get("cashNo") %>
-				<%=(Integer)m.get("cashNo") %>
-		<%
-			}
-		%>
-	</div>
-
 </body>
 </html>
