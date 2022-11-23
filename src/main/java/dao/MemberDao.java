@@ -7,6 +7,7 @@ import java.sql.*;
 
 import util.DBUtil;
 import vo.Member;
+import java.net.*;
 
 public class MemberDao {
 	public Member login(Member paramMember) throws Exception { // 다형성 : 부모타입으로 자식타입을 감싸는 것 
@@ -23,7 +24,7 @@ public class MemberDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT member_id memberId, member_name memberName FROM member WHERE member_id=? AND member_pw=?";
+		String sql = "SELECT member_id memberId, member_name memberName FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramMember.getMemberId());
 		stmt.setString(2, paramMember.getMemberPw());
@@ -40,7 +41,7 @@ public class MemberDao {
 		return resultMember;
 	}
 	
-	// 회원가입
+	// 회원가입 insertLoginAction.jsp
 	public int insertMember(Member paramMember) throws Exception {
 		int resultRow = 0;
 		
@@ -51,7 +52,7 @@ public class MemberDao {
 	
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "INSERT INTO member(member_id, member_pw, member_name) values(?, ?, ?)";
+		String sql = "INSERT INTO member(member_id, member_pw, member_name, updatedate, createdate) values(?, PASSWORD(?), ?, CURDATE(), CURDATE())";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramMember.getMemberId());
 		stmt.setString(2, paramMember.getMemberPw());
@@ -62,10 +63,60 @@ public class MemberDao {
 		conn.close();
 		return resultRow;
 	}
+	
+	
+	// 중복확인 insertLoginAction.jsp
+	public String failLogin(Member paramMember) throws Exception {
+		String idMsg=null;
+		String targetUrl=null;
+		DBUtil dbUtil = new DBUtil();
+		String idSql="SELECT member_id FROM member WHERE member_id = ?";
+		Connection conn = dbUtil.getConnection();
+		PreparedStatement idStmt = conn.prepareStatement(idSql);
+		idStmt.setString(1, paramMember.getMemberId());
+		ResultSet rs = idStmt.executeQuery();
+		if(rs.next()){
+			idStmt=conn.prepareStatement(idSql);
+			idMsg=URLEncoder.encode("중복된 ID", "utf-8"); 
+			targetUrl="/insertLoginForm.jsp?idMsg="+idMsg;
+		}
+		rs.close();
+		idStmt.close();
+		conn.close();
+		
+		return targetUrl;
+	}
+	
+	// 회원정보수정 updateMemberAction.jsp
+	public int updateMember(Member paramMember) throws Exception {
+		int updateResultRow=0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql="UPDATE member SET member_name=?, createdate=CURDATE() WHERE member_id=? AND member_pw=PASSWORD(?)"; 
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setString(1, paramMember.getMemberName());
+		stmt.setString(2, paramMember.getMemberId());
+		stmt.setString(3, paramMember.getMemberPw());
+		updateResultRow=stmt.executeUpdate();
+
+		stmt.close();
+		conn.close();
+		return updateResultRow;
+	}
+	
+	// 회원탈퇴 deleteMemberAction.jsp
+	public int deleteMember(Member paramMember) throws Exception {
+		int deleteResult = 0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setString(1, paramMember.getMemberId());
+		stmt.setString(2, paramMember.getMemberPw());
+		deleteResult=stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+		return deleteResult;
+	}
 }
-
-
-
-
-
-

@@ -15,21 +15,26 @@
 			</tr>
 			<tr>
 				<td>비밀번호</td>
-				<td><input type="text" name="memberPw"></td>
+				<td><input type="password" name="memberPw"></td>
 			</tr>
 		</table>
 		<button type="submit" class="btn btn-secondary">로그인</button>
+		<%
+			if(request.getParameter("loginMsg") != null) {
+		%>
+				<%=request.getParameter("loginMsg")%>
+		<%
+			}
+		
+			if(request.getParameter("msg") != null) {
+		%>
+				<%=request.getParameter("msg")%>
+		<%
+			}
+		%>
 	</form>
 	<div>
 		<a href="<%=request.getContextPath()%>/insertLoginForm.jsp">회원가입</a>
 	</div>
-
-	<%
-		if(request.getParameter("msg") != null) {
-	%>
-		<%=request.getParameter("msg")%>
-	<%
-		}
-	%>
 </body>
 </html>

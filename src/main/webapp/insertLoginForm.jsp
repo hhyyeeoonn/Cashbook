@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>insertLoginForm</title>
 </head>
 <body>
 	<h2>회원가입</h2>
@@ -33,6 +33,13 @@
 				</tr>
 			</table>
 			<button type="submit">가입</button>
+			<%
+				if(request.getParameter("msg") != null) {
+			%>
+				<%=request.getParameter("msg") %>
+			<%
+				}
+			%>
 		</form>
 </body>
 </html>

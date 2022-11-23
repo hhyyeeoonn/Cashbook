@@ -76,9 +76,13 @@
 </head>
 <body>
 	<div>
-		<!-- 로그인 정보(세션 loginMember 변수) 출력 -->
+		<h4><%=loginMember.getMemberName()%>(<%=loginMember.getMemberId()%>)님 반갑습니다.</h4>
 	</div>
-	
+	<div>
+		<a href="<%=request.getContextPath()%>/updateMemberForm.jsp">회원정보수정</a>
+		<a href="<%=request.getContextPath()%>/logout.jsp">로그아웃</a>
+	</div>
+	<br>
 	<div>
 		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">[<-이전달]</a>
 		<%=year%>년 <%=month + 1%>월 

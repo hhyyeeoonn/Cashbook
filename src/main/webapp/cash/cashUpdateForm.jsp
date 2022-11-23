@@ -5,12 +5,25 @@
 <%@ page import = "vo.*" %>
 <%
 	// Controller
+	request.setCharacterEncoding("utf-8");
 	int year = Integer.parseInt(request.getParameter("year"));
 	int month = Integer.parseInt(request.getParameter("month"));
 	int date = Integer.parseInt(request.getParameter("date"));
 		System.out.println(year);
 		System.out.println(month);
 		System.out.println(date);
+	
+	String categoryNum=request.getParameter("categoryNo");
+	String price=request.getParameter("cashPrice");
+	String memberId=request.getParameter("memberId");
+	String cashDate=request.getParameter("cashDate");
+	String cashMemo=request.getParameter("cashMemo");
+		System.out.println(">>"+year);
+		System.out.println(">>"+month);
+		System.out.println(">>"+date);
+		System.out.println(">>"+memberId);
+		System.out.println(">>"+cashDate);
+		System.out.println(">>"+cashMemo);
 	
 	Member loginMember = (Member)session.getAttribute("loginMember");
 		System.out.println(loginMember);
@@ -24,7 +37,7 @@
 	//ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month);
 	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByDate(loginMember.getMemberId(), year, month, date);
 
-	
+
 	// View
 %>
 
@@ -32,7 +45,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>cashUpdateForm</title>
 </head>
 <body>
 	<!-- cash 입력 폼 -->
@@ -58,7 +71,7 @@
 			<tr>
 				<td>cashPrice</td>
 				<td>
-					<input type="text" name="cashPrice">
+					<input type="text" name="cashPrice" value="">
 				</td>
 			</tr>
 			<tr>
@@ -70,11 +83,11 @@
 			<tr>
 				<td>cashMemo</td>
 				<td>
-					<textarea rows="3" cols="50" name="cashMemo"></textarea>
+					<textarea rows="3" cols="50" name="cashMemo"><%= %></textarea>
 				</td>
 			</tr>
 		</table>
-		<button type="submit">입력</button>
+		<button type="submit">수정</button>
 		<%
 			if(request.getParameter("Msg") != null) {
 		%>
@@ -92,8 +105,6 @@
 				<th>항목</th>
 				<th>금액</th>
 				<th>내용</th>
-				<th>수정</th> <!-- /cash/updateCash.jsp?cashNo= -->
-				<th>삭제</th> <!-- /cash/deleteCash.jsp?cashNo= -->
 			</tr>
 			<%
 				for(HashMap<String, Object> m : list) {
@@ -106,8 +117,6 @@
 						<td><%=(String)(m.get("categoryName"))%></td>
 						<td><%=(Long)(m.get("cashPrice"))%></td>
 						<td><%=(String)(m.get("cashMemo"))%></td>
-						<td><a href="/cash/cashbookupdateForm.jsp">수정</a></td>
-						<td><a href="/cash/deletecashbookListForm.jsp">삭제</a></td>
 					</tr>
 			<%
 				}

@@ -6,6 +6,10 @@ public class Cash {
 	private int categoryNo;  // FK -> INNER JOIN -> Map타입 /참조키가 있다는 것은 나중에 INNER JOIN이 발생할 수 있다는 것/ 
 	private String memberId;
 	private String cashDate;
+	private long cashPrice;
+	private String cashMemo;
+	private String updatedate;
+	private String createdate;
 	public int getCashNo() {
 		return cashNo;
 	}
@@ -54,9 +58,5 @@ public class Cash {
 	public void setCreatedate(String createdate) {
 		this.createdate = createdate;
 	}
-	private long cashPrice;
-	private String cashMemo;
-	private String updatedate;
-	private String createdate;
 	
 }

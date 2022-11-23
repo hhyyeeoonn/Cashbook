@@ -26,7 +26,7 @@
 	Member resultMember = memberDao.login(paramMember); // login이라는 메서드 자체가 M
 	
 	String redirectUrl = "/loginForm.jsp";
-	
+	// 로그인 성공시 session에 로그인 정보 저장
 	if(resultMember != null) {
 		session.setAttribute("loginMember", resultMember);
 		redirectUrl = "/cash/cashList.jsp";
@@ -34,5 +34,4 @@
 
 	// redirect
 	response.sendRedirect(request.getContextPath()+redirectUrl);
-
 %>

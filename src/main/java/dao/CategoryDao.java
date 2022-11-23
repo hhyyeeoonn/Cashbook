@@ -3,9 +3,11 @@ package dao;
 import java.util.ArrayList;
 import util.*;
 import java.sql.*;
-import vo.Category;
+import vo.*;
 
 public class CategoryDao {
+	
+	// 
 	public ArrayList<Category> selectCategoryList() throws Exception {
 		ArrayList<Category> categoryList = new ArrayList<Category>();
 		DBUtil dbUtil = new DBUtil();
@@ -23,4 +25,5 @@ public class CategoryDao {
 		conn.close();
 		return categoryList;
 	}
+	
 }

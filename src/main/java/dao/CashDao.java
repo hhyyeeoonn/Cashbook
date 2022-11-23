@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import vo.*;
 
 import util.DBUtil;
 
@@ -61,5 +62,59 @@ public class CashDao {
 	      }
 		conn.close();
 		return list;
+		
+	}
+	// insertCashAction.jsp
+	public int insertCashList(Cash paramCate) throws Exception {
+		int resultRow = 0;
+	
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "INSERT INTO cash(category_no, member_id, cash_date, cash_price, cash_memo, updatedate, createdate) values(?, ?, ?, ?, ?, CURDATE(), CURDATE())";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, paramCate.getCategoryNo());
+		stmt.setString(2, paramCate.getMemberId());
+		stmt.setString(3, paramCate.getCashDate());
+		stmt.setLong(4, paramCate.getCashPrice());
+		stmt.setString(5, paramCate.getCashMemo());
+		resultRow = stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+		return resultRow;
+	}
+	
+	// 가계부내역수정 updateMemberAction.jsp
+	public int updateMember(Member paramMember) throws Exception {
+		int updateResultRow=0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql="UPDATE member SET member_name=?, createdate=CURDATE() WHERE member_id=? AND member_pw=PASSWORD(?)"; 
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setString(1, paramMember.getMemberName());
+		stmt.setString(2, paramMember.getMemberId());
+		stmt.setString(3, paramMember.getMemberPw());
+		updateResultRow=stmt.executeUpdate();
+
+		stmt.close();
+		conn.close();
+		return updateResultRow;
+	}
+		
+		
+	// 가계부내역삭제 deleteCashListAction.jsp
+	public int deleteCash(Cash paramCate) throws Exception {
+		int deleteResult = 0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM cash c INNER JOIN member m ON c.member_id=m.member_id WHERE m.member_id=? AND m.member_pw=PASSWORD(?)";
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setString(1, paramCate.getMemberId());
+		stmt.setint(2, paramCate.getMemberPw());
+		deleteResult=stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+		return deleteResult;
 	}
 }
