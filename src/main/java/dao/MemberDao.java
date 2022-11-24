@@ -10,6 +10,8 @@ import vo.Member;
 import java.net.*;
 
 public class MemberDao {
+	
+	// 로그인
 	public Member login(Member paramMember) throws Exception { // 다형성 : 부모타입으로 자식타입을 감싸는 것 
 		Member resultMember = null;
 		
@@ -24,7 +26,7 @@ public class MemberDao {
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT member_id memberId, member_name memberName FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
+		String sql = "SELECT member_id memberId, member_level memberLevel, member_name memberName FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramMember.getMemberId());
 		stmt.setString(2, paramMember.getMemberPw());
@@ -44,12 +46,6 @@ public class MemberDao {
 	// 회원가입 insertLoginAction.jsp
 	public int insertMember(Member paramMember) throws Exception {
 		int resultRow = 0;
-		
-		/*
-		Class.forName("");
-		Connection conn = DriverManager.getConnection()"jdbc..";
-		*/
-	
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		String sql = "INSERT INTO member(member_id, member_pw, member_name, updatedate, createdate) values(?, PASSWORD(?), ?, CURDATE(), CURDATE())";
@@ -59,8 +55,11 @@ public class MemberDao {
 		stmt.setString(3, paramMember.getMemberName());
 		resultRow = stmt.executeUpdate();
 		
+		/*
 		stmt.close();
 		conn.close();
+		*/
+		dbUtil.close(null, stmt, conn); // rs값은 없으므로 null
 		return resultRow;
 	}
 	
@@ -86,6 +85,32 @@ public class MemberDao {
 		
 		return targetUrl;
 	}
+	/*
+	// 회원가입 1)id 중복확인 2)회원가입
+	
+	// 반환값 t:이미 존재, f:사용 가능 
+	  public boolean selectMemberIdCk(String memberId) throws Exception {
+      boolean result = false;
+      DBUtil dbUtil = new DBUtil();
+      Connection conn = dbUtil.getConnection();
+      String sql = "SELECT member_id FROM member WHERE member_id = ?";
+      PreparedStatement stmt = conn.prepareStatement(sql);
+      stmt.setString(1, memberId);
+      ResultSet rs = stmt.executeQuery();
+      	if(rs.next()) {
+         	result = true;
+      	}
+      dbUtil.close(rs, stmt, conn);
+      return result;
+      }
+
+	 */
+	
+	
+	
+	
+	
+	
 	
 	// 회원정보수정 updateMemberAction.jsp
 	public int updateMember(Member paramMember) throws Exception {

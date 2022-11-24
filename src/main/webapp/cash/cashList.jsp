@@ -75,21 +75,31 @@
 <title>cashList</title>
 </head>
 <body>
+
+	<!-- 회원정보 -->
 	<div>
 		<h4><%=loginMember.getMemberName()%>(<%=loginMember.getMemberId()%>)님 반갑습니다.</h4>
 	</div>
 	<div>
 		<a href="<%=request.getContextPath()%>/updateMemberForm.jsp">회원정보수정</a>
+			<%
+				if(loginMember.getMemberLevel() > 0) {
+			%>
+				<a href="<%=request.getContextPath()%>/admin/adminMain.jsp">관리자 페이지</a>
+			<%
+				}
+			%>
 		<a href="<%=request.getContextPath()%>/logout.jsp">로그아웃</a>
 	</div>
 	<br>
+	
+	<!-- 달력 -->
 	<div>
-		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">[<-이전달]</a>
+		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">[< 이전달]</a>
 		<%=year%>년 <%=month + 1%>월 
-		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">[다음달->]</a>
+		<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">[다음달 >]</a>
 	</div>
 	<div>
-		<!-- 달력 -->
 		<table border=1>
 			<tr>
 				<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
@@ -116,8 +126,7 @@
 									<%=(String)(m.get("categoryName"))%>
 									&nbsp;
 									<%=(Long)(m.get("cashPrice"))%>원
-									<br>
-									
+									<br>	
 						<%
 								}
 							}

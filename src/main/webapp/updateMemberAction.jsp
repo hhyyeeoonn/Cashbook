@@ -17,10 +17,10 @@
 	paramMember.setMemberName(memberName);
 	
 	
-	// 수정 확인
+	// M
 	MemberDao updateMember = new MemberDao();
 	int row = updateMember.updateMember(paramMember);
-	
+	// 수정확인 및 cashList로 보내기
 	if(row==1) { 
 		session.setAttribute("loginMember", paramMember);
 		response.sendRedirect(request.getContextPath() + "/cash/cashList.jsp");

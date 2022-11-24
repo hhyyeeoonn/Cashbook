@@ -62,21 +62,21 @@ public class CashDao {
 	      }
 		conn.close();
 		return list;
-		
 	}
-	// insertCashAction.jsp
-	public int insertCashList(Cash paramCate) throws Exception {
+	
+	// 가계부 내용 추가 insertCashAction.jsp
+	public int insertCashList(Cash cash) throws Exception {
 		int resultRow = 0;
 	
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		String sql = "INSERT INTO cash(category_no, member_id, cash_date, cash_price, cash_memo, updatedate, createdate) values(?, ?, ?, ?, ?, CURDATE(), CURDATE())";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, paramCate.getCategoryNo());
-		stmt.setString(2, paramCate.getMemberId());
-		stmt.setString(3, paramCate.getCashDate());
-		stmt.setLong(4, paramCate.getCashPrice());
-		stmt.setString(5, paramCate.getCashMemo());
+		stmt.setInt(1, cash.getCategoryNo());
+		stmt.setString(2, cash.getMemberId());
+		stmt.setString(3, cash.getCashDate());
+		stmt.setLong(4, cash.getCashPrice());
+		stmt.setString(5, cash.getCashMemo());
 		resultRow = stmt.executeUpdate();
 		
 		stmt.close();
@@ -84,37 +84,58 @@ public class CashDao {
 		return resultRow;
 	}
 	
-	// 가계부내역수정 updateMemberAction.jsp
-	public int updateMember(Member paramMember) throws Exception {
-		int updateResultRow=0;
+	// 가계부 수정폼 cashUpdateForm.jsp
+	public ArrayList<HashMap<String, Object>> selectCashList(int cashNo) throws Exception {
+		ArrayList<HashMap<String, Object>> list2 = new ArrayList<HashMap<String, Object>>();
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql="UPDATE member SET member_name=?, createdate=CURDATE() WHERE member_id=? AND member_pw=PASSWORD(?)"; 
-		PreparedStatement stmt=conn.prepareStatement(sql);  
-		stmt.setString(1, paramMember.getMemberName());
-		stmt.setString(2, paramMember.getMemberId());
-		stmt.setString(3, paramMember.getMemberPw());
-		updateResultRow=stmt.executeUpdate();
-
-		stmt.close();
-		conn.close();
-		return updateResultRow;
+		String sql = "SELECT cash_price cashPrice, cash_date cashDate, cash_memo cashMemo FROM cash WHERE cash_no=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, cashNo);
+		ResultSet rs= stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("cashDate", rs.getString("cashDate"));
+			m.put("cashMemo", rs.getString("cashMemo"));
+			m.put("cashPrice", rs.getLong("cashPrice"));
+			list2.add(m);
+	      }
+		dbUtil.close(rs, stmt, conn);
+		return list2;
 	}
+	
+	// 가계부 내역수정 cashUpdateAction.jsp
+	public int updateCashList(Cash cash) throws Exception {
+		int resultRow = 0;
+	
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "UPDATE cash SET category_no=?, cash_date=?, cash_price=?, cash_memo=?, updatedate=CURDATE() WHERE cash_no=? AND member_id=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, cash.getCategoryNo());
+		stmt.setString(2, cash.getCashDate());
+		stmt.setLong(3, cash.getCashPrice());
+		stmt.setString(4, cash.getCashMemo());
+		stmt.setInt(5, cash.getCashNo());
+		stmt.setString(6, cash.getMemberId());
+		resultRow = stmt.executeUpdate();
 		
-		
+		dbUtil.close(null, stmt, conn);
+		return resultRow;
+	}
+	
 	// 가계부내역삭제 deleteCashListAction.jsp
-	public int deleteCash(Cash paramCate) throws Exception {
+	public int deleteCashList(Cash cash) throws Exception {
 		int deleteResult = 0;
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "DELETE FROM cash c INNER JOIN member m ON c.member_id=m.member_id WHERE m.member_id=? AND m.member_pw=PASSWORD(?)";
+		String sql = "DELETE FROM cash WHERE cash_no=? AND member_id=?";
 		PreparedStatement stmt=conn.prepareStatement(sql);  
-		stmt.setString(1, paramCate.getMemberId());
-		stmt.setint(2, paramCate.getMemberPw());
+		stmt.setInt(1, cash.getCashNo());
+		stmt.setString(2, cash.getMemberId());
 		deleteResult=stmt.executeUpdate();
 		
-		stmt.close();
-		conn.close();
+		dbUtil.close(null, stmt, conn);
 		return deleteResult;
 	}
 }

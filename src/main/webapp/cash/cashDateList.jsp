@@ -106,8 +106,8 @@
 						<td><%=(String)(m.get("categoryName"))%></td>
 						<td><%=(Long)(m.get("cashPrice"))%></td>
 						<td><%=(String)(m.get("cashMemo"))%></td>
-						<td><a href="/cash/cashbookupdateForm.jsp">수정</a></td>
-						<td><a href="/cash/deletecashbookListForm.jsp">삭제</a></td>
+						<td><a href="<%=request.getContextPath()%>/cash/cashUpdateForm.jsp?year=<%=year%>&month=<%=month%>&date=<%=date%>&cashNo=<%=(Integer)(m.get("cashNo"))%>&categoryKind=<%=(String)(m.get("categoryKind"))%>">수정</a></td>
+						<td><a href="<%=request.getContextPath()%>/cash/deleteCashListAction.jsp?year=<%=year%>&month=<%=month%>&date=<%=date%>&cashNo=<%=(Integer)(m.get("cashNo"))%>&memberId=<%=loginMember.getMemberId()%>">삭제</a></td>
 					</tr>
 			<%
 				}

@@ -13,6 +13,7 @@
 	String pw=request.getParameter("pw");
 	
 	
+	// 입력누락 확인
 	if((id == null) || (id.equals("")) || (name == null) || (name.equals("")) || (pw == null) || (pw.equals(""))) {
 		String msg=URLEncoder.encode("빈칸에 내용을 입력하십시오.", "utf-8"); 
 		response.sendRedirect(request.getContextPath() + "/insertLoginForm.jsp?msg="+msg);
@@ -26,8 +27,8 @@
 	paramMember.setMemberName(name);
 		
 	// 중복확인
-	MemberDao failMember = new MemberDao();
-	String targetUrl = failMember.failLogin(paramMember);
+	MemberDao memberDao = new MemberDao(); // 한 번만 써도 됨... 
+	String targetUrl = memberDao.failLogin(paramMember);
 	
 	if(targetUrl != null) {
 		response.sendRedirect(request.getContextPath()+targetUrl);
@@ -36,14 +37,11 @@
 		System.out.println("아이디 중복확인 완료");
 		
 	// 가입확인
-	MemberDao newbie = new MemberDao();
-	int row = newbie.insertMember(paramMember);
+	int row = memberDao.insertMember(paramMember);
+		System.out.println(row + "<<-insertMemberAction.jsp:row");
 	
 	if(row == 1) {
 		String loginMsg=URLEncoder.encode("가입을 환영합니다. 로그인 하십시오.", "utf-8");
 		response.sendRedirect(request.getContextPath() + "/loginForm.jsp?loginMsg="+loginMsg);
-		System.out.println("가입성공");
-	} else {
-		System.out.println("가입실패");
-	}
+	} 
 %>

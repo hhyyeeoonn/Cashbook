@@ -9,34 +9,27 @@
 	int year = Integer.parseInt(request.getParameter("year"));
 	int month = Integer.parseInt(request.getParameter("month"));
 	int date = Integer.parseInt(request.getParameter("date"));
-		System.out.println(year);
-		System.out.println(month);
-		System.out.println(date);
+	int cashNo=Integer.parseInt(request.getParameter("cashNo"));
+	String categoryKind=request.getParameter("categoryKind");
 	
-	String categoryNum=request.getParameter("categoryNo");
-	String price=request.getParameter("cashPrice");
-	String memberId=request.getParameter("memberId");
-	String cashDate=request.getParameter("cashDate");
-	String cashMemo=request.getParameter("cashMemo");
 		System.out.println(">>"+year);
 		System.out.println(">>"+month);
 		System.out.println(">>"+date);
-		System.out.println(">>"+memberId);
-		System.out.println(">>"+cashDate);
-		System.out.println(">>"+cashMemo);
-	
+		System.out.println(">>"+cashNo);
+		System.out.println(">>"+categoryKind);
+		
 	Member loginMember = (Member)session.getAttribute("loginMember");
 		System.out.println(loginMember);
-	
-	
+
+		
 	// Model 호출
 	CategoryDao categoryDao = new CategoryDao();
 	ArrayList<Category> categoryList= categoryDao.selectCategoryList();
+	ArrayList<Category> categoryList2= categoryDao.selectCategoryList2(categoryKind);
 	
 	CashDao cashDao = new CashDao();
-	//ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month);
 	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByDate(loginMember.getMemberId(), year, month, date);
-
+	ArrayList<HashMap<String, Object>> list2=cashDao.selectCashList(cashNo);
 
 	// View
 %>
@@ -48,8 +41,9 @@
 <title>cashUpdateForm</title>
 </head>
 <body>
-	<!-- cash 입력 폼 -->
-	<form action="<%=request.getContextPath()%>/cash/insertCashAction.jsp?year=<%=year%>&month=<%=month%>&date=<%=date%>" method="post">
+
+	<!-- cash 수정 폼 -->
+	<form action="<%=request.getContextPath()%>/cash/cashUpdateAction.jsp?year=<%=year%>&month=<%=month%>&date=<%=date%>&cashNo=<%=cashNo%>&categoryKind=<%=categoryKind%>" method="post">
 		<input type="hidden" name="memberId" value="<%=loginMember.getMemberId()%>">
 		<table border="1">
 			<tr>
@@ -57,45 +51,53 @@
 				<td>
 					<select name="categoryNo">
 						<%
-							for(Category c:categoryList) {
+							for(Category c:categoryList2) {
+									
 						%>
-							<option value="<%=c.getCategoryNo()%>">
-								<%=c.getCategoryKind()%>) <%=c.getCategoryName()%>
-							</option>
+								<option value="<%=c.getCategoryNo()%>">
+									<%=c.getCategoryKind()%>) <%=c.getCategoryName()%>
+								</option>
 						<%
 							}
 						%>
 					</select>
 				</td>
 			</tr>
-			<tr>
-				<td>cashPrice</td>
-				<td>
-					<input type="text" name="cashPrice" value="">
-				</td>
-			</tr>
-			<tr>
-				<td>cashDate</td>
-				<td>
-					<input type="text" name="cashDate" value="<%=year%>-<%=month%>-<%=date%>" readonly="readonly">
-				</td>
-			</tr>
-			<tr>
-				<td>cashMemo</td>
-				<td>
-					<textarea rows="3" cols="50" name="cashMemo"><%= %></textarea>
-				</td>
-			</tr>
+			<%
+				for(HashMap<String, Object> a:list2) {
+			%>
+				<tr>
+					<td>cashPrice</td>
+					<td>
+						<input type="text" name="cashPrice" value="<%=(Long)(a.get("cashPrice"))%>">
+					</td>
+				</tr>
+				<tr>
+					<td>cashDate</td>
+					<td>
+						<input type="text" name="cashDate" value="<%=(String)(a.get("cashDate")) %>" readonly="readonly">
+					</td>
+				</tr>
+				<tr>
+					<td>cashMemo</td>
+					<td>
+						<textarea rows="3" cols="50" name="cashMemo"><%=(String)(a.get("cashMemo"))%></textarea>
+					</td>
+				</tr>
+			<%
+				}
+			%>
 		</table>
 		<button type="submit">수정</button>
 		<%
-			if(request.getParameter("Msg") != null) {
+			if(request.getParameter("msg") != null) {
 		%>
-				<%=request.getParameter("Msg")%>
+				<%=request.getParameter("msg")%>
 		<%
 			}
 		%>
 	</form>
+	
 	<!-- cash 목록 출력 -->
 	<div>
 		<table>

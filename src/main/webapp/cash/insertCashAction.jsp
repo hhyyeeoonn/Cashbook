@@ -30,7 +30,7 @@
 	}
 	
 	int categoryNo=Integer.parseInt(categoryNum);
-	int cashPrice=Integer.parseInt(price);
+	long cashPrice=Long.parseLong(price);
 		/*
 		System.out.println(">>"+categoryNo);
 		System.out.println(">>"+cashPrice);
@@ -43,25 +43,20 @@
 	}		
 	
 	Member loginMember=(Member)session.getAttribute("loginMember");
-		System.out.println(loginMember);
+		System.out.println(loginMember + "<<loginMember");
 		
-	Cash paramCate = new Cash();
-	paramCate.setMemberId(memberId);
-	paramCate.setCategoryNo(categoryNo);
-	paramCate.setCashPrice(cashPrice);
-	paramCate.setCashDate(cashDate);
-	paramCate.setCashMemo(cashMemo);
+	Cash cash = new Cash();
+	cash.setMemberId(memberId);
+	cash.setCategoryNo(categoryNo);
+	cash.setCashPrice(cashPrice);
+	cash.setCashDate(cashDate);
+	cash.setCashMemo(cashMemo);
 	
 	
 	// Model
-	CashDao insertCash = new CashDao();
-	int row = insertCash.insertCashList(paramCate);
-	
-	if(row == 1) {
-		response.sendRedirect(request.getContextPath() + "/cash/cashDateList.jsp?year="+year+"&month="+month+"&date="+date);
-		System.out.println("입력성공");
-	} else {
-		System.out.println("입력실패");
-	}
+	CashDao cashDao = new CashDao();
+	int row = cashDao.insertCashList(cash);
+		System.out.println(row + "<<입력성공:insertCashAction");
 
+	response.sendRedirect(request.getContextPath() + "/cash/cashDateList.jsp?year="+year+"&month="+month+"&date="+date);
 %>
