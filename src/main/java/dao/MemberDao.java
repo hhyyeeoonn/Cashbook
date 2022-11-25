@@ -7,9 +7,58 @@ import java.sql.*;
 
 import util.DBUtil;
 import vo.Member;
+import vo.Notice;
+
 import java.net.*;
+import java.util.*;
 
 public class MemberDao {
+	// 관리자 : 회원레벨수정
+	public int upadateMemberLevel(Member member) throws Exception {
+		return 0;
+	}
+	
+	// 관리자 : 멤버수 
+	public int selectMemberCount() throws Exception {
+		return 0;
+	}
+	
+	// 관리자 : 멤버 리스트
+	public ArrayList<Member> selectMemberlistByPage(int beginRow, int rowPerPage) throws Exception {
+		ArrayList<Member> memberList = new ArrayList<Member>();
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "SELECT member_id memberId, member_level memberLevel, member_name memberName, createdate FROM member ORDER BY createdate DESC LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, beginRow);
+		stmt.setInt(2, rowPerPage);
+		ResultSet rs= stmt.executeQuery();
+		while(rs.next()) {
+			Member m = new Member();
+			m.setMemberId(rs.getString("memberId"));
+			m.setMemberLevel(rs.getInt("memberLevel"));
+			m.setMemberName(rs.getString("memberName"));
+			m.setCreatedate(rs.getString("createdate"));
+			memberList.add(m);
+	      }
+				
+		dbUtil.close(rs, stmt, conn);
+		return memberList;
+	}
+	
+	// 관리자 : 멤버 강퇴
+	public int deleteMember(int memberNo) { // 메서드 오버로딩 이름은 같으나 매개변수가 달라 다른 역할을 수행함
+		int deleteResult = 0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM member WHERE member_No=?";
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setString(1, paramMember.getMemberId());
+		deleteResult=stmt.executeUpdate();
+		
+		dbUtil.close(null, stmt, conn);
+		return deleteResult;
+	}
 	
 	// 로그인
 	public Member login(Member paramMember) throws Exception { // 다형성 : 부모타입으로 자식타입을 감싸는 것 
@@ -35,6 +84,7 @@ public class MemberDao {
 			resultMember = new Member();
 			resultMember.setMemberId(rs.getString("memberId"));
 			resultMember.setMemberName(rs.getString("memberName"));
+			resultMember.setMemberLevel(rs.getInt("memberLevel"));
 		}
 		
 		rs.close(); // rs그 자체를 return하려면 실행되고 있어야 하는 코드가 너무 많아짐 그래서 ArrayList에 복사해서 return 하는 것
@@ -107,13 +157,8 @@ public class MemberDao {
 	 */
 	
 	
-	
-	
-	
-	
-	
 	// 회원정보수정 updateMemberAction.jsp
-	public int updateMember(Member paramMember) throws Exception {
+	public int updateMember(Member member, Member paramMember) throws Exception {
 		int updateResultRow=0;
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -130,7 +175,7 @@ public class MemberDao {
 	}
 	
 	// 회원탈퇴 deleteMemberAction.jsp
-	public int deleteMember(Member paramMember) throws Exception {
+	public int deleteMember(Member member, Member paramMember) throws Exception {
 		int deleteResult = 0;
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -140,8 +185,7 @@ public class MemberDao {
 		stmt.setString(2, paramMember.getMemberPw());
 		deleteResult=stmt.executeUpdate();
 		
-		stmt.close();
-		conn.close();
+		dbUtil.close(null, stmt, conn);
 		return deleteResult;
 	}
 }

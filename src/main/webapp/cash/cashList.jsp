@@ -10,7 +10,6 @@
 		return;
 	}
 
-
 	// session안에 저장된 멤버(현재 로그인 사용자) 
 	Member loginMember = (Member)session.getAttribute("loginMember");
 	

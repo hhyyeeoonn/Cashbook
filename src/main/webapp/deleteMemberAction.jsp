@@ -5,6 +5,14 @@
 
 <%
 	// C
+	Member loginMember = (Member)session.getAttribute("loginMember");
+		System.out.println(loginMember);
+	
+	if((loginMember.getMemberId()) == null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}		
+	
 	request.setCharacterEncoding("utf-8");
 	String memberId=request.getParameter("memberId");
 	String memberPw=request.getParameter("memberPw");
@@ -16,7 +24,7 @@
 	
 	// M
 	MemberDao memberDao = new MemberDao(); // C
-	int deleteMember = memberDao.deleteMember(paramMember); // login이라는 메서드 자체가 M
+	int deleteMember = memberDao.deleteMember(loginMember, paramMember); // login이라는 메서드 자체가 M
 	
 	if(deleteMember == 1) { 
 		session.invalidate();

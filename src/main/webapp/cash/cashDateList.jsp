@@ -5,16 +5,21 @@
 <%@ page import = "vo.*" %>
 <%
 	// Controller
+	Member loginMember = (Member)session.getAttribute("loginMember");
+		System.out.println(loginMember);
+	
+	if((loginMember.getMemberId()) == null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}		
+	
 	int year = Integer.parseInt(request.getParameter("year"));
 	int month = Integer.parseInt(request.getParameter("month"));
 	int date = Integer.parseInt(request.getParameter("date"));
 		System.out.println(year);
 		System.out.println(month);
 		System.out.println(date);
-	
-	Member loginMember = (Member)session.getAttribute("loginMember");
-		System.out.println(loginMember);
-	
+		
 	
 	// Model 호출
 	CategoryDao categoryDao = new CategoryDao();
@@ -75,6 +80,7 @@
 			</tr>
 		</table>
 		<button type="submit">입력</button>
+		<a href="<%=request.getContextPath()%>/cash/cashList.jsp">달력으로</a>
 		<%
 			if(request.getParameter("Msg") != null) {
 		%>

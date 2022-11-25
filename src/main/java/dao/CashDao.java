@@ -65,7 +65,7 @@ public class CashDao {
 	}
 	
 	// 가계부 내용 추가 insertCashAction.jsp
-	public int insertCashList(Cash cash) throws Exception {
+	public int insertCashList(String memberId, Cash cash) throws Exception {
 		int resultRow = 0;
 	
 		DBUtil dbUtil = new DBUtil();
@@ -85,7 +85,7 @@ public class CashDao {
 	}
 	
 	// 가계부 수정폼 cashUpdateForm.jsp
-	public ArrayList<HashMap<String, Object>> selectCashList(int cashNo) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectCashList(String memberId, int cashNo) throws Exception {
 		ArrayList<HashMap<String, Object>> list2 = new ArrayList<HashMap<String, Object>>();
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -105,7 +105,7 @@ public class CashDao {
 	}
 	
 	// 가계부 내역수정 cashUpdateAction.jsp
-	public int updateCashList(Cash cash) throws Exception {
+	public int updateCashList(String memberId, Cash cash) throws Exception {
 		int resultRow = 0;
 	
 		DBUtil dbUtil = new DBUtil();
@@ -125,7 +125,7 @@ public class CashDao {
 	}
 	
 	// 가계부내역삭제 deleteCashListAction.jsp
-	public int deleteCashList(Cash cash) throws Exception {
+	public int deleteCashList(String memberId, Cash cash) throws Exception {
 		int deleteResult = 0;
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();

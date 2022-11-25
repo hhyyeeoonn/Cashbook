@@ -16,10 +16,17 @@
 	cash.setMemberId(memberId);
 	cash.setCashNo(cashNo);
 	
+	Member loginMember = (Member)session.getAttribute("loginMember");
+	
+	if(session.getAttribute("loginMemberId") != null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}
+	
 	
 	// M
 	CashDao cashDao = new CashDao(); // C
-	int row = cashDao.deleteCashList(cash);
+	int row = cashDao.deleteCashList(loginMember.getMemberId(), cash);
 	if(row == 1) { 
 		System.out.println("삭제성공:deleteCashListAction");
 	}

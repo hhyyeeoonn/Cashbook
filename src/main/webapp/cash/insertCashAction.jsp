@@ -7,6 +7,15 @@
 
 <%
 	// C
+	Member loginMember = (Member)session.getAttribute("loginMember");
+		System.out.println(loginMember);
+	
+	if((loginMember.getMemberId()) == null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}		
+	
+	
 	request.setCharacterEncoding("utf-8");
 	String categoryNum=request.getParameter("categoryNo");
 	String price=request.getParameter("cashPrice");
@@ -42,9 +51,6 @@
 		return;
 	}		
 	
-	Member loginMember=(Member)session.getAttribute("loginMember");
-		System.out.println(loginMember + "<<loginMember");
-		
 	Cash cash = new Cash();
 	cash.setMemberId(memberId);
 	cash.setCategoryNo(categoryNo);
@@ -55,7 +61,7 @@
 	
 	// Model
 	CashDao cashDao = new CashDao();
-	int row = cashDao.insertCashList(cash);
+	int row = cashDao.insertCashList(loginMember.getMemberId(), cash);
 		System.out.println(row + "<<입력성공:insertCashAction");
 
 	response.sendRedirect(request.getContextPath() + "/cash/cashDateList.jsp?year="+year+"&month="+month+"&date="+date);

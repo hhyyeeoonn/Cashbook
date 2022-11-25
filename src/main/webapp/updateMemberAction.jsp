@@ -6,6 +6,13 @@
 <%@ page import="java.net.*" %>
 <%
 	// C
+	Member loginMember = (Member)session.getAttribute("loginMember");
+	
+	if((loginMember.getMemberId()) == null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}
+	
 	request.setCharacterEncoding("utf-8");
 	String memberId=request.getParameter("memberId");
 	String memberPw=request.getParameter("memberPw");
@@ -19,13 +26,15 @@
 	
 	// M
 	MemberDao updateMember = new MemberDao();
-	int row = updateMember.updateMember(paramMember);
+	int row = updateMember.updateMember(loginMember, paramMember);
 	// 수정확인 및 cashList로 보내기
 	if(row==1) { 
-		session.setAttribute("loginMember", paramMember);
+		session.setAttribute("loginMember", loginMember);
 		response.sendRedirect(request.getContextPath() + "/cash/cashList.jsp");
 		System.out.println("수정성공");
 	} else {
+		String msg=URLEncoder.encode("비밀번호를 확인하세요.", "utf-8");
+		response.sendRedirect(request.getContextPath() + "/updateMemberForm.jsp?msg="+msg);
 		System.out.println("수정실패");
 	}
 %>

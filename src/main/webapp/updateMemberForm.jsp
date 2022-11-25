@@ -37,6 +37,12 @@
 		<button type="submit" class="btn btn-secondary">회원정보 수정</button>
 		<a href="<%=request.getContextPath()%>/deleteMemberForm.jsp">회원탈퇴</a>
 	</form>
-
+	<%
+		if(request.getParameter("msg") != null) {
+	%>
+			<%=request.getParameter("msg")%>
+	<%
+		}
+	%>
 </body>
 </html>

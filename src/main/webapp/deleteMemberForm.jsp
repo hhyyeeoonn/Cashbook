@@ -1,4 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="vo.*" %>
+<%
+	Member loginMember = (Member)session.getAttribute("loginMember");
+	System.out.println(loginMember);
+	
+	if((loginMember.getMemberId()) == null) { // 로그인 되지 않은 상태
+	response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+	return;
+	}		
+%>
+
 <!DOCTYPE html>
 <html>
 <head>

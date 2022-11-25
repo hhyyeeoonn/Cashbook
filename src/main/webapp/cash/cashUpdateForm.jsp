@@ -5,22 +5,26 @@
 <%@ page import = "vo.*" %>
 <%
 	// Controller
+	Member loginMember = (Member)session.getAttribute("loginMember");
+	if(session.getAttribute("loginMemberId") != null) { // 로그인 되지 않은 상태
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
+		return;
+	}
+	
 	request.setCharacterEncoding("utf-8");
 	int year = Integer.parseInt(request.getParameter("year"));
 	int month = Integer.parseInt(request.getParameter("month"));
 	int date = Integer.parseInt(request.getParameter("date"));
 	int cashNo=Integer.parseInt(request.getParameter("cashNo"));
 	String categoryKind=request.getParameter("categoryKind");
-	
+		/*
 		System.out.println(">>"+year);
 		System.out.println(">>"+month);
 		System.out.println(">>"+date);
 		System.out.println(">>"+cashNo);
 		System.out.println(">>"+categoryKind);
+		*/
 		
-	Member loginMember = (Member)session.getAttribute("loginMember");
-		System.out.println(loginMember);
-
 		
 	// Model 호출
 	CategoryDao categoryDao = new CategoryDao();
@@ -29,7 +33,7 @@
 	
 	CashDao cashDao = new CashDao();
 	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByDate(loginMember.getMemberId(), year, month, date);
-	ArrayList<HashMap<String, Object>> list2=cashDao.selectCashList(cashNo);
+	ArrayList<HashMap<String, Object>> list2=cashDao.selectCashList(loginMember.getMemberId(), cashNo);
 
 	// View
 %>
