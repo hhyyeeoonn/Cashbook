@@ -7,7 +7,7 @@ import java.sql.*;
 
 import util.DBUtil;
 import vo.Member;
-import vo.Notice;
+
 
 import java.net.*;
 import java.util.*;
@@ -20,9 +20,22 @@ public class MemberDao {
 	
 	// 관리자 : 멤버수 
 	public int selectMemberCount() throws Exception {
-		return 0;
+		int memberCnt=0;
+		
+		DBUtil dbUtil=new DBUtil();
+		Connection conn=dbUtil.getConnection();
+		String sql="SELECT COUNT(*) cnt FROM member";
+		PreparedStatement stmt=conn.prepareStatement(sql);
+		ResultSet rs=stmt.executeQuery();
+		if(rs.next()) {
+			memberCnt=rs.getInt("cnt");
+		}
+		
+		dbUtil.close(rs, stmt, conn);
+		return memberCnt;
 	}
 	
+		
 	// 관리자 : 멤버 리스트
 	public ArrayList<Member> selectMemberlistByPage(int beginRow, int rowPerPage) throws Exception {
 		ArrayList<Member> memberList = new ArrayList<Member>();
@@ -47,13 +60,13 @@ public class MemberDao {
 	}
 	
 	// 관리자 : 멤버 강퇴
-	public int deleteMember(int memberNo) { // 메서드 오버로딩 이름은 같으나 매개변수가 달라 다른 역할을 수행함
+	public int deleteMember(int memberNo) throws Exception { // 메서드 오버로딩 이름은 같으나 매개변수가 달라 다른 역할을 수행함
 		int deleteResult = 0;
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		String sql = "DELETE FROM member WHERE member_No=?";
 		PreparedStatement stmt=conn.prepareStatement(sql);  
-		stmt.setString(1, paramMember.getMemberId());
+		stmt.setInt(1, memberNo);
 		deleteResult=stmt.executeUpdate();
 		
 		dbUtil.close(null, stmt, conn);

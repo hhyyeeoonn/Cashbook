@@ -12,15 +12,58 @@ public class NoticeDao {
 		return 0;
 	}
 	
+	/*
+	 int deleteResult = 0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "DELETE FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setString(1, paramMember.getMemberId());
+		stmt.setString(2, paramMember.getMemberPw());
+		deleteResult=stmt.executeUpdate();
+		
+		dbUtil.close(null, stmt, conn);
+		return deleteResult;
+	 */
+	
+	
+	
 	public int updateNotice(Notice notice) throws Exception {
 		String sql="UPDATE notice SET notice_memo=? WHWERE notice_no=?";
 		return 0;
 	}
 	
 	public int insertNotice(Notice notice) throws Exception {
+		int resultRow=0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
 		String sql="INSERT notice(notice_memo, updatedate, createdate) VALUES(?, NOW(), NOW())"; // datetime -> now() 시간까지 나옴
-		return 0;
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, notice.getNoticeMemo());
+		
+		return resultRow;
 	}
+	/*
+	int resultRow = 0;
+	
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql = "INSERT INTO cash(category_no, member_id, cash_date, cash_price, cash_memo, updatedate, createdate) values(?, ?, ?, ?, ?, CURDATE(), CURDATE())";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, cash.getCategoryNo());
+		stmt.setString(2, cash.getMemberId());
+		stmt.setString(3, cash.getCashDate());
+		stmt.setLong(4, cash.getCashPrice());
+		stmt.setString(5, cash.getCashMemo());
+		resultRow = stmt.executeUpdate();
+		
+		stmt.close();
+		conn.close();
+		return resultRow;
+	 */
+	
+	
+	
 	
 	
 	
@@ -63,25 +106,4 @@ public class NoticeDao {
 		}
 		return list;
 	}
-	/*
-	 페이징 참고
-
-	int currentPage=1;
-	if(request.getParameter("currentPage") != null) {
-		currentPage = Integer.parseInt(request.getParameter("currentPage"));
-	}
-	
-	int rowPerPage=10;
-	int beginRow=(currentPage-1) * rowPerPage; 
-			
-	String cntSql="SELECT COUNT(*) cnt FROM salaries";
-	PreparedStatement cntStmt=conn.prepareStatement(cntSql);
-	ResultSet cntRs=cntStmt.executeQuery();
-	int cnt=0; //전체 행의 수
-	if(cntRs.next()) {
-		cnt=cntRs.getInt("cnt");
-	}	
-	int lastPage=(int)(Math.ceil((double)cnt / (double)rowPerPage)); 마지막페이지는 전체행 나누기 한번에 출력될 페이지 수
-	  
-	 */
 }

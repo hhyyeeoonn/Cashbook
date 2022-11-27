@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%@ page import="dao.*" %>
+<%@ page import="java.util.*" %>
 
 <%
 	//Controller
@@ -13,10 +14,22 @@
 		return;
 	}
 	
+	int currentPage=1;
+	if(request.getParameter("currentPage") != null) {
+		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+	}
+	
 	
 	// Model 호출
-	MemberDao memberDao=new MemberDao();
-	ArrayList<Member> selectMemberlistByPage(int beginRow, int rowPerPage)
+	int rowPerPage=5;
+	int beginRow=(currentPage-1) * rowPerPage;
+	
+	NoticeDao noticeDao = new NoticeDao();
+	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
+	int noticeLastPage = noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
+	
+	MemberDao memberDao = new MemberDao();
+	ArrayList<Member> memberList=memberDao.selectMemberlistByPage(beginRow, rowPerPage);
 	// 최근 공지 5개, 최근 멤버 5명
 	
 	// View

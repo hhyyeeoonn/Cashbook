@@ -39,7 +39,7 @@
 <title>adminMain</title>
 </head>
 <body>
-	<div>
+
 	
 	<!-- 최근 알림사항 -->
 		<div>
@@ -76,6 +76,7 @@
 				%>
 			</table>
 		</div>
+			
 	<!-- 목록표 -->
 		<table>
 			<tr>

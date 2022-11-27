@@ -101,7 +101,7 @@
 			<%
 				if(currentPage < noticeLastPage) {
 			%>
-				<a href="<%=request.getContextPath()%>/admin/noticeList.jsp?currentPage=<%=lastPage%>">마지막</a>
+				<a href="<%=request.getContextPath()%>/admin/noticeList.jsp?currentPage=<%=noticeLastPage%>">마지막</a>
 			<%
 				}
 			%>
