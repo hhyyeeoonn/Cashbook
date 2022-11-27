@@ -61,6 +61,14 @@
 				<th>레벨수정</th> <!-- memberNo로 membeLevel 수정 -->
 				<th>강제탈퇴</th>
 			</tr>
+	
+			<%
+				for() {	
+			%>
+			
+			<%
+				}
+			%>
 	</div>
 </body>
 </html>
