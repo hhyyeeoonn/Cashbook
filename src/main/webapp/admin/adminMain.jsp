@@ -92,6 +92,9 @@
 				<td>
 					<a href="<%=request.getContextPath()%>/admin/categoryList.jsp">카테고리관리</a>
 				</td>
+				<td>
+					<a href="">QnA</a>
+				</td>
 			</tr>
 			<tr>
 				<th colspan="3">개인메뉴</th>

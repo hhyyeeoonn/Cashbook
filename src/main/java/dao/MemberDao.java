@@ -13,12 +13,25 @@ import java.net.*;
 import java.util.*;
 
 public class MemberDao {
-	// 관리자 : 회원레벨수정
-	public int upadateMemberLevel(Member member) throws Exception {
-		return 0;
-	}
+	// lastPage구하기 마지막페이지를 구하려면 전체row를 구하라
+		public int selectMemberPageCount(int rowPerPage) throws Exception {
+			int lastPage=0;
+			int cnt=0;
+			DBUtil dbUtil = new DBUtil();
+			Connection conn = dbUtil.getConnection();
+			String sql="SELECT COUNT(*) cnt From member"; // (*)는 COUNT와 붙여쓸 것 띄어쓰기 하면 오류남
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs=stmt.executeQuery();
+			if(rs.next()) {
+				cnt=rs.getInt("cnt");
+			}
+			lastPage=(int)(Math.ceil((double)cnt / (double)rowPerPage));
+			
+			dbUtil.close(rs, stmt, conn);
+			return lastPage;
+		}
 	
-	// 관리자 : 멤버수 
+	// 관리자 : 멤버수 memberList.jsp
 	public int selectMemberCount() throws Exception {
 		int memberCnt=0;
 		
@@ -36,22 +49,24 @@ public class MemberDao {
 	}
 	
 		
-	// 관리자 : 멤버 리스트
+	// 관리자 : 멤버 리스트 memberList.jsp
 	public ArrayList<Member> selectMemberlistByPage(int beginRow, int rowPerPage) throws Exception {
 		ArrayList<Member> memberList = new ArrayList<Member>();
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT member_id memberId, member_level memberLevel, member_name memberName, createdate FROM member ORDER BY createdate DESC LIMIT ?, ?";
+		String sql = "SELECT member_no memberNo, member_id memberId, member_level memberLevel, member_name memberName, createdate, updatedate FROM member ORDER BY createdate DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, beginRow);
 		stmt.setInt(2, rowPerPage);
 		ResultSet rs= stmt.executeQuery();
 		while(rs.next()) {
 			Member m = new Member();
+			m.setMemberNo(rs.getInt("memberNo"));
 			m.setMemberId(rs.getString("memberId"));
 			m.setMemberLevel(rs.getInt("memberLevel"));
 			m.setMemberName(rs.getString("memberName"));
 			m.setCreatedate(rs.getString("createdate"));
+			m.setUpdatedate(rs.getString("updatedate"));
 			memberList.add(m);
 	      }
 				
@@ -59,14 +74,56 @@ public class MemberDao {
 		return memberList;
 	}
 	
-	// 관리자 : 멤버 강퇴
-	public int deleteMember(int memberNo) throws Exception { // 메서드 오버로딩 이름은 같으나 매개변수가 달라 다른 역할을 수행함
+	// 관리자 : 수정할 멤버 고르기 /admin/updateMemberLevel.jsp
+		public ArrayList<Member> selectMember(int memberNo) throws Exception {
+			ArrayList<Member> theMemberList = new ArrayList<Member>();
+			DBUtil dbUtil = new DBUtil();
+			Connection conn = dbUtil.getConnection();
+			String sql = "SELECT member_id memberId, member_level memberLevel, member_name memberName, createdate, updatedate FROM member WHERE member_no=?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, memberNo);
+			ResultSet rs= stmt.executeQuery();
+			while(rs.next()) {
+				Member m = new Member();
+				m.setMemberId(rs.getString("memberId"));
+				m.setMemberLevel(rs.getInt("memberLevel"));
+				m.setMemberName(rs.getString("memberName"));
+				m.setCreatedate(rs.getString("createdate"));
+				m.setUpdatedate(rs.getString("updatedate"));
+				theMemberList.add(m);
+		      }
+					
+			dbUtil.close(rs, stmt, conn);
+			return theMemberList;
+		}
+		
+	// 회원등급수정 /admin/updateMemberLevelAction.jsp
+	public int upadateMemberLevel(Member member) throws Exception {
+		int row=0;
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		String sql="UPDATE member "
+				+ " SET member_level=?"
+				+ ", updatedate=CURDATE()"
+				+ " WHERE member_id=?"; 
+		PreparedStatement stmt=conn.prepareStatement(sql);  
+		stmt.setInt(1, member.getMemberLevel());
+		stmt.setString(2, member.getMemberId());
+		row=stmt.executeUpdate();
+		
+		dbUtil.close(null, stmt, conn);
+		return row;
+	}
+	
+	// /admin/deleteMemberList.jsp
+	public int deleteMember(Member member) throws Exception { // 메서드 오버로딩 이름은 같으나 매개변수가 달라 다른 역할을 수행함
 		int deleteResult = 0;
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "DELETE FROM member WHERE member_No=?";
+		String sql = "DELETE FROM member WHERE member_No=? AND member_id=?";
 		PreparedStatement stmt=conn.prepareStatement(sql);  
-		stmt.setInt(1, memberNo);
+		stmt.setInt(1, member.getMemberNo());
+		stmt.setString(2, member.getMemberId());
 		deleteResult=stmt.executeUpdate();
 		
 		dbUtil.close(null, stmt, conn);

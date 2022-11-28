@@ -27,10 +27,6 @@
 	NoticeDao noticeDao = new NoticeDao();
 	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
 	int noticeLastPage = noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
-	
-	
-	// 최근 공지 5개, 최근 멤버 5명
-	
 	// View
 %>
 <!DOCTYPE html>
@@ -42,9 +38,10 @@
 <body>
 	<ul>
 		<li>
-			<a href="<%=request.getContextPath()%>/admin/noticeList.jsp">공지관리</a>
+			<a href="<%=request.getContextPath()%>/admin/adminMain.jsp">관리자페이지</a>
 			<a href="<%=request.getContextPath()%>/admin/categoryList.jsp">카테고리관리</a>
-			<a href="<%=request.getContextPath()%>/admin/noticeList.jsp">회원관리</a>
+			<a href="<%=request.getContextPath()%>/admin/memberList.jsp">회원관리</a>
+			<a href="">QnA</a>
 		</li>
 	</ul>
 	
@@ -52,13 +49,17 @@
 	<div>
 		<h1>공지</h1>
 	</div>
+	<br>
+	<div>
+		<a href="<%=request.getContextPath()%>/admin/insertNoticeForm.jsp">새 공지 작성</a>
+	</div>
 	<div>
 		<table>
 			<tr>
 				<th>공지내용</th>
 				<th>공지날짜</th>
-				<th>수정</th>
-				<th>삭제</th>
+				<th></th>
+				<th></th>
 			</tr>
 			<%
 				for(Notice n:list) {
@@ -66,8 +67,8 @@
 					<tr>
 						<td><%=n.getNoticeMemo()%></td>
 						<td><%=n.getCreatedate()%></td>
-						<td><a href="<%=request.getContextPath()%>/admin/admin.jsp">수정</a></td>
-						<td><a href="<%=request.getContextPath()%>/admin/admin.jsp">삭제</a></td>
+						<td><a href="<%=request.getContextPath()%>/admin/updateNoticeList.jsp?noticeNo=<%=n.getNoticeNo()%>">수정</a></td>
+						<td><a href="<%=request.getContextPath()%>/admin/deleteNoticeList.jsp?noticeNo=<%=n.getNoticeNo()%>">삭제</a></td>
 					</tr>
 			<%
 				}

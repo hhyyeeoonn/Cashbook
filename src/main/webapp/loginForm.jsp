@@ -5,14 +5,16 @@
 <%
 	int currentPage=1;
 	if(request.getParameter("currentPage") != null) {
-		currentPage=Integer.parseInt(request.getParameter("currentPage"));
+		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 	}
+
+	// Model 호출 : notice list
 	int rowPerPage=5;
-	int beginRow=(currentPage - 1) * rowPerPage;
-	// int lastPage=0;
+	int beginRow=(currentPage-1) * rowPerPage;
 	
 	NoticeDao noticeDao = new NoticeDao();
-	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage);
+	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
+	int noticeLastPage = noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
 %>
 
 
@@ -41,6 +43,37 @@
 				}
 			%>
 		</table>
+		<div>
+			<span>
+				<%
+					if(currentPage > 1) {
+				%>
+						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=1">처음</a>
+						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=<%=currentPage-1%>">이전</a>
+				<%
+					}
+				%>
+			</span>
+			<span><%=currentPage%></span>
+			<span>
+				<%
+					if(currentPage < noticeLastPage) { 
+				%>
+						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=<%=currentPage+1%>">다음</a>
+				<%
+					}
+				%>		
+			</span>
+			<span>
+				<%
+					if(currentPage < noticeLastPage) {
+				%>
+					<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=<%=noticeLastPage%>">마지막</a>
+				<%
+					}
+				%>
+			</span>
+		</div>
 	</div>
 	
 	<!-- 로그인폼 -->
