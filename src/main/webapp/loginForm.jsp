@@ -14,7 +14,7 @@
 	
 	NoticeDao noticeDao = new NoticeDao();
 	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
-	int noticeLastPage = noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
+	int noticeLastPage=noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
 %>
 
 
@@ -25,7 +25,7 @@
 <title>loginForm</title>
 </head>
 <body>
-	<!-- 공지(5개) 페이징 -->
+	<!-- 공지목록-->
 	<div>
 		<table>
 			<tr>
@@ -46,6 +46,7 @@
 		<div>
 			<span>
 				<%
+					int noticeCurrentPage=0;
 					if(currentPage > 1) {
 				%>
 						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=1">처음</a>
@@ -75,7 +76,7 @@
 			</span>
 		</div>
 	</div>
-	
+
 	<!-- 로그인폼 -->
 	<h1>로그인</h1>
 	<form action="<%=request.getContextPath()%>/loginAction.jsp">
@@ -106,6 +107,9 @@
 	</form>
 	<div>
 		<a href="<%=request.getContextPath()%>/insertLoginForm.jsp">회원가입</a>
+	</div>
+	<div>
+		<jsp:include page="/inc/footer.jsp"></jsp:include> <!-- 요청된 결과물에 추가시키는 거라서 request.getContextPath빠짐 -->
 	</div>
 </body>
 </html>

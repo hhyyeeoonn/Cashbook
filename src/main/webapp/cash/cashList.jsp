@@ -130,7 +130,7 @@
 								}
 							}
 						}
-							System.out.println(date);
+							//System.out.println(date);
 						%>
 					</div>
 				</td>
@@ -145,6 +145,9 @@
 			</tr>
 			<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
 		</table>
+	</div>
+	<div>
+		<jsp:include page="/inc/footer.jsp"></jsp:include> <!-- 요청된 결과물에 추가시키는 거라서 request.getContextPath빠짐 -->
 	</div>
 </body>
 </html>

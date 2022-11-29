@@ -93,7 +93,7 @@
 					<a href="<%=request.getContextPath()%>/admin/categoryList.jsp">카테고리관리</a>
 				</td>
 				<td>
-					<a href="">QnA</a>
+					<a href="<%=request.getContextPath()%>/adminHelp/helpListAll.jsp">QnA</a>
 				</td>
 			</tr>
 			<tr>
