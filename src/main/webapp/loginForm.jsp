@@ -1,115 +1,108 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import ="dao.*" %>
-<%@ page import = "vo.*" %>
-<%@ page import = "java.util.*" %>
-<%
-	int currentPage=1;
-	if(request.getParameter("currentPage") != null) {
-		currentPage = Integer.parseInt(request.getParameter("currentPage"));
-	}
-
-	// Model 호출 : notice list
-	int rowPerPage=5;
-	int beginRow=(currentPage-1) * rowPerPage;
-	
-	NoticeDao noticeDao = new NoticeDao();
-	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
-	int noticeLastPage=noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
-%>
-
 
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>loginForm</title>
-</head>
-<body>
-	<!-- 공지목록-->
-	<div>
-		<table>
-			<tr>
-				<th>공지내용</th>
-				<th>날짜</th>
-			</tr>
-			<%
-				for(Notice n: list) {
-			%>
-				<tr>
-					<td><%=n.getNoticeMemo()%></td>
-					<td><%=n.getCreatedate()%></td>
-				</tr>
-			<%
-				}
-			%>
-		</table>
-		<div>
-			<span>
-				<%
-					int noticeCurrentPage=0;
-					if(currentPage > 1) {
-				%>
-						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=1">처음</a>
-						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=<%=currentPage-1%>">이전</a>
-				<%
-					}
-				%>
-			</span>
-			<span><%=currentPage%></span>
-			<span>
-				<%
-					if(currentPage < noticeLastPage) { 
-				%>
-						<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=<%=currentPage+1%>">다음</a>
-				<%
-					}
-				%>		
-			</span>
-			<span>
-				<%
-					if(currentPage < noticeLastPage) {
-				%>
-					<a href="<%=request.getContextPath()%>/loginForm.jsp?currentPage=<%=noticeLastPage%>">마지막</a>
-				<%
-					}
-				%>
-			</span>
-		</div>
-	</div>
+<html lang="en">
 
-	<!-- 로그인폼 -->
-	<h1>로그인</h1>
-	<form action="<%=request.getContextPath()%>/loginAction.jsp">
-		<table class="table table-borderless">
-			<tr>
-				<td>아이디</td>
-				<td><input type="text" name="memberId"></td>
-			</tr>
-			<tr>
-				<td>비밀번호</td>
-				<td><input type="password" name="memberPw"></td>
-			</tr>
-		</table>
-		<button type="submit" class="btn btn-secondary">로그인</button>
-		<%
-			if(request.getParameter("loginMsg") != null) {
-		%>
-				<%=request.getParameter("loginMsg")%>
-		<%
-			}
-		
-			if(request.getParameter("msg") != null) {
-		%>
-				<%=request.getParameter("msg")%>
-		<%
-			}
-		%>
-	</form>
-	<div>
-		<a href="<%=request.getContextPath()%>/insertLoginForm.jsp">회원가입</a>
-	</div>
-	<div>
-		<jsp:include page="/inc/footer.jsp"></jsp:include> <!-- 요청된 결과물에 추가시키는 거라서 request.getContextPath빠짐 -->
-	</div>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Login</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom fonts for this template-->
+    <link href="./Resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="./Resources/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="./Resources/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+        	
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    </div>
+                                    <%
+                                    	if(request.getParameter("msg") != null) {
+                                    %>
+                             			<div class="text-center">
+                                    		<div class="alert alert-danger alert-dismissible">
+  												<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  												<small>아이디와 비밀번호를 확인하세요</small>
+											</div>
+										</div>
+                                    <%
+                                    	}
+                                    %>
+                                    
+                                    <form class="user" action="<%=request.getContextPath()%>/loginAction.jsp" method="post">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                name="memberId" aria-describedby="IdHelp"
+                                                placeholder="Enter User ID...">
+                                        </div>                                        
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                name="memberPw" placeholder="Password">
+                                        </div>
+                                       <!--  
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember
+                                                    Me</label>
+                                            </div>
+                                        </div>
+                                        -->
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                                            Sign in
+                                        </button>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="<%=request.getContextPath()%>/insertLoginForm.jsp">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
 </body>
 </html>

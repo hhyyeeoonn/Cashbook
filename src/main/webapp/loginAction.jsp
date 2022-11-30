@@ -25,13 +25,17 @@
 	MemberDao memberDao = new MemberDao(); // C
 	Member resultMember = memberDao.login(paramMember); // login이라는 메서드 자체가 M
 	
-	String redirectUrl = "/cash/cashList.jsp";
+	String redirectUrl = "/cash/cashNoticeList.jsp";
 	// 로그인 성공시 session에 로그인 정보 저장
 	if((resultMember != null) && (resultMember.getMemberLevel() == 1)) {
 		session.setAttribute("loginMember", resultMember);
 		redirectUrl = "/admin/adminMain.jsp";
 	} else if(resultMember != null) { 
 		session.setAttribute("loginMember", resultMember);	
+	} else {
+		String msg=URLEncoder.encode("아이디와 비밀번호를 확인하십시오.", "utf-8");
+		response.sendRedirect(request.getContextPath()+"/loginForm.jsp?msg="+msg);
+		return;
 	}
 
 	// redirect
