@@ -83,7 +83,7 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="<%=request.getContextPath()%>/insertLoginForm.jsp">Create an Account!</a>
+                                        <a class="small" href="<%=request.getContextPath()%>/insertLoginForm.jsp">My Calendar의 새 회원되기</a>
                                     </div>
                                 </div>
                             </div>
