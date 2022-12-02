@@ -69,14 +69,10 @@
 	CashDao cashDao = new CashDao();
 	ArrayList<HashMap<String, Object>> list2 = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
 	int date2=0;
-	Cash cash=null;
+	String cashDay=null;
 	for(HashMap<String, Object> c:list2) {
+		String day=(String)(c.get("cashDate"));
 		date2=Integer.parseInt(day.substring(8));
-		cash=new Cash();
-		c.setCashDate((String)(c.get("cashDate")));
-		
-		System.out.println();
-		System.out.println(date2);
 	}
 	
 	int cashListCnt=cashDao.selectCashCount(loginMember.getMemberId(), year, month+1, date2);
@@ -465,16 +461,16 @@
 												
 														<%
 															String cashDate=null;
-															if(date==date2 && cashListCnt != 0) {
-															cashDate="cash"+cashListCnt;
-															System.out.println(cashListCnt);
+															if(cashListCnt != 0) {
+																cashDate="cash"+cashListCnt;
 														%>
-																
-																		+<%=cashDate%>
+																		<%=cashDate%>
 																		<br>	
 													<%	
 															}
+																
 														}
+													
 													%>
 													</div>
 												</td>
