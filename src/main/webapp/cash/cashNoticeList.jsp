@@ -68,18 +68,6 @@
 	// Model 호출 : 일별 cash 목록
 	CashDao cashDao = new CashDao();
 	ArrayList<HashMap<String, Object>> list2 = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
-	int date2=0;
-	Cash cash=null;
-	for(HashMap<String, Object> c:list2) {
-		date2=Integer.parseInt(day.substring(8));
-		cash=new Cash();
-		c.setCashDate((String)(c.get("cashDate")));
-		
-		System.out.println();
-		System.out.println(date2);
-	}
-	
-	int cashListCnt=cashDao.selectCashCount(loginMember.getMemberId(), year, month+1, date2);
 	
 	// Model 호출 : notice list
 	int rowPerPage=5;
@@ -462,19 +450,22 @@
 													
 													<div><%=date%></div>
 													<div>
-												
-														<%
-															String cashDate=null;
-															if(date==date2 && cashListCnt != 0) {
-															cashDate="cash"+cashListCnt;
-															System.out.println(cashListCnt);
-														%>
-																
-																		+<%=cashDate%>
-																		<br>	
-													<%	
+													<%
+														int cnt = 0;
+														for(HashMap<String, Object> m:list2) {
+															String cashDate=(String)(m.get("cashDate"));
+															if(Integer.parseInt(cashDate.substring(8)) == date) {
+																++cnt;
 															}
 														}
+														if(cnt > 0) {
+														%>
+															[<%=cnt%>]  <!-- object타입으로 들어가있어서 형변환필요 -->
+																<br>
+													<%	
+														}
+													} 
+														//System.out.println(date);
 													%>
 													</div>
 												</td>
