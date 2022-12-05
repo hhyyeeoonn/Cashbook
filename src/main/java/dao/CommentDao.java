@@ -104,18 +104,27 @@ public class CommentDao {
 	// 삭제
 	public int deleteComment(Comment comment) throws Exception {
 		int row=0;
-		String sql="DELETE FROM comment"
-				+ " WHERE help_no=? AND comment_no=?";
-		DBUtil dbUtil=new DBUtil();
+		DBUtil dbUtil=null;
 		Connection conn=null;
 		PreparedStatement stmt=null;
-		conn=dbUtil.getConnection();
-		stmt=conn.prepareStatement(sql);
-		stmt.setInt(1, comment.getHelpNo());
-		stmt.setInt(2, comment.getCommentNo());
-		row = stmt.executeUpdate();
-		
-		dbUtil.close(null, stmt, conn);
+		String sql="DELETE FROM comment"
+				+ " WHERE help_no=? AND comment_no=?";
+		try {
+			dbUtil=new DBUtil();
+			conn=dbUtil.getConnection();
+			stmt=conn.prepareStatement(sql);
+			stmt.setInt(1, comment.getHelpNo());
+			stmt.setInt(2, comment.getCommentNo());
+			row = stmt.executeUpdate();
+		} catch(Exception e) {
+	         e.printStackTrace();
+	      } finally {
+	         try {
+	        	 dbUtil.close(null, stmt, conn);
+	         } catch(Exception e) {
+		            e.printStackTrace();
+		         }
+	      }
 		return row;
 	}	
 }

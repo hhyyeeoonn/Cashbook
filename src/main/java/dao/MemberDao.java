@@ -17,17 +17,30 @@ public class MemberDao {
 		public int selectMemberPageCount(int rowPerPage) throws Exception {
 			int lastPage=0;
 			int cnt=0;
-			DBUtil dbUtil = new DBUtil();
-			Connection conn = dbUtil.getConnection();
+			DBUtil dbUtil = null;
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			ResultSet rs = null;
 			String sql="SELECT COUNT(*) cnt From member"; // (*)는 COUNT와 붙여쓸 것 띄어쓰기 하면 오류남
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			ResultSet rs=stmt.executeQuery();
-			if(rs.next()) {
-				cnt=rs.getInt("cnt");
-			}
-			lastPage=(int)(Math.ceil((double)cnt / (double)rowPerPage));
+			try {
+				dbUtil = new DBUtil();
+				conn = dbUtil.getConnection();
+				stmt = conn.prepareStatement(sql);
+				rs = stmt.executeQuery();
+				if(rs.next()) {
+					cnt=rs.getInt("cnt");
+				}
+				lastPage=(int)(Math.ceil((double)cnt / (double)rowPerPage));
+			} catch(Exception e) {
+		         e.printStackTrace();
+		      } finally {
+		         try {
+		        	 dbUtil.close(rs, stmt, conn);
+		         } catch(Exception e) {
+			            e.printStackTrace();
+			         }
+		      } 
 			
-			dbUtil.close(rs, stmt, conn);
 			return lastPage;
 		}
 	
@@ -128,6 +141,44 @@ public class MemberDao {
 		
 		dbUtil.close(null, stmt, conn);
 		return deleteResult;
+	}
+	
+	// 내정보보기 myInfo.jsp
+	public ArrayList<Member> selectMember(String loginMemberId) {
+		ArrayList<Member> theMemberList = new ArrayList<Member>();
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null; 
+		ResultSet rs = null;
+		String sql = "SELECT member_id memberId"
+				+ ", member_level memberLevel"
+				+ ", member_name memberName"
+				+ ", createdate"
+				+ " FROM member WHERE member_id=?";
+		try {
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, loginMemberId);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Member m = new Member();
+				m.setMemberId(rs.getString("memberId"));
+				m.setMemberLevel(rs.getInt("memberLevel"));
+				m.setMemberName(rs.getString("memberName"));
+				m.setCreatedate(rs.getString("createdate"));
+				theMemberList.add(m);
+			}
+		} catch(Exception e) {
+	         e.printStackTrace();
+	      } finally {
+	         try {
+	        	 dbUtil.close(rs, stmt, conn);
+	         } catch(Exception e) {
+		            e.printStackTrace();
+		         }
+	      }		
+		return theMemberList;
 	}
 	
 	// 로그인

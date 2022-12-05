@@ -12,70 +12,18 @@
 
 	// session안에 저장된 멤버(현재 로그인 사용자) 
 	Member loginMember = (Member)session.getAttribute("loginMember");
-
-
-	int currentPage=1;
-	if(request.getParameter("currentPage") != null) {
-		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+	String loginMemberId = loginMember.getMemberId();
+	
+	MemberDao memberDao = new MemberDao();
+	ArrayList<Member> myList = memberDao.selectMember(loginMemberId);
+	for(Member m : myList) {
+		Member member = new Member();
+		member.setMemberId(m.getMemberId());
+		member.setMemberLevel(m.getMemberLevel());
+		member.setMemberName(m.getMemberName());
+		member.setCreatedate(m.getCreatedate());
 	}
 	
-	// request 년 + 월
-	int year = 0; 
-	int month = 0;
-		
-	if ((request.getParameter("year") == null) || (request.getParameter("month")) == null) {
-		Calendar today = Calendar.getInstance(); // 오늘날짜
-		year = today.get(Calendar.YEAR);
-		month = today.get(Calendar.MONTH); // 우리가 생각하는 달보다 1 작다
-	} else {
-		year = Integer.parseInt(request.getParameter("year"));
-		month = Integer.parseInt(request.getParameter("month"));
-		// month -> -1, month -> 12일 경우
-		if (month == -1) {
-			month = 11;
-			year -= 1;	
-		}
-		if(month == 12) {
-			month = 0;
-			year += 1;
-		}
-	}
-
-	// 출력하고자 하는 연도와 달과 그 달 1일의 요일 (일=1, 월=2, 화=3,...,토=7)
-	Calendar targetDate = Calendar.getInstance();
-	targetDate.set(Calendar.YEAR, year);
-	targetDate.set(Calendar.MONTH, month);
-	targetDate.set(Calendar.DATE, 1);
-	// firstDay는 1일의 요일
-	int firstDay = targetDate.get(Calendar.DAY_OF_WEEK);
-	// beginBlank 개수는 firstDat-1
-	
-	
-	// 마지막 날짜
-	int lastDate = targetDate.getActualMaximum(Calendar.DATE);	
-	
-	// 달력 출력 테이블의 시작 공백셀(td)과 마지막 공백섹(td)의 개수
-	int beginBlank = firstDay - 1;
-	int endBlank = 0; // 7로 나누어 떨어진다 /beginBlank + lastDate + endBlank = 7
-	if((beginBlank + lastDate) % 7 != 0) {
-		endBlank = 7 - ((beginBlank + lastDate) % 7);
-	}
-	
-	// 전체 td의 개수 : 7로 나누어 떨어져야 한다
-	int totalTd = beginBlank + lastDate + endBlank; 
-	
-	
-	// Model 호출 : 일별 cash 목록
-	CashDao cashDao = new CashDao();
-	ArrayList<HashMap<String, Object>> list2 = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
-	
-	// Model 호출 : notice list
-	int rowPerPage=5;
-	int beginRow=(currentPage-1) * rowPerPage;
-	
-	NoticeDao noticeDao = new NoticeDao();
-	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
-	int noticeLastPage=noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
 %>
 
 
@@ -90,7 +38,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>cashNoticeList</title>
+    <title>myInfo</title>
 
     <!-- Custom fonts for this template-->
     <link href="<%=request.getContextPath()%>/Resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -399,7 +347,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="<%=request.getContextPath()%>/myInfo.jsp">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     회원정보수정
                                 </a>
@@ -432,55 +380,7 @@
                                 <div class="card-body">
                                  	
                                  	
-                                 	<!-- 달력 -->
-									<div>
-										<table class="table table-bordered">
-											<tr>
-												<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
-											</tr>
-											<tr>
-										<%
-											for (int i=1; i<totalTd; i++) {
-										%>
-												<td>
-										<%
-													int date = i-beginBlank;
-													if(date > 0 && date <= lastDate) {
-										%>
-													
-													<div><%=date%></div>
-													<div>
-													<%
-														int cnt = 0;
-														for(HashMap<String, Object> m:list2) {
-															String cashDate=(String)(m.get("cashDate"));
-															if(Integer.parseInt(cashDate.substring(8)) == date) {
-																++cnt;
-															}
-														}
-														if(cnt > 0) {
-														%>
-															<mark style = "background-color : pink;">cash [<%=cnt%>]</mark>  <!-- object타입으로 들어가있어서 형변환필요 -->
-																<br>
-													<%	
-														}
-													} 
-														//System.out.println(date);
-													%>
-													</div>
-												</td>
-										<% 
-												if(i % 7 == 0 && i != totalTd) {
-										%>
-												</tr><tr> <!-- td 7개 만들고 테이블 줄바꿈 -->
-										<%
-												}
-											}
-										%>
-											</tr>
-											<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
-										</table>
-									</div>  
+                                 	<!--  -->
                                    
                                     
                                 </div>
@@ -494,29 +394,7 @@
                                     <h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
                                 </div>
                                 <div class="card-body">
-                                    <!-- 공지목록-->
-										<div>
-											<table>
-												<%
-													for(Notice n: list) {
-														String noticeDate=n.getCreatedate();
-												%>
-													<tr>
-														<td><%=n.getNoticeMemo()%></td>
-														<td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%=noticeDate.substring(0, 10)%></td>
-													</tr>
-												<%
-													}
-												%>
-											</table>
-											<div>
-												<a href="<%=request.getContextPath()%>/admin/noticeList.jsp">더 보기&rarr;</a>
-											</div>
-											
-										</div>
-										<!--  
-										<a target="_blank" rel="nofollow" href="<%=request.getContextPath()%>/"> 공지사항 &rarr;</a>
-										-->
+                                 <!--  -->
                                 </div>
                             </div>
 

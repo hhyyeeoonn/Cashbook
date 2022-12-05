@@ -13,11 +13,11 @@ public class CashDao {
 
 	// 호출 : cashDateList.jsp
 	public ArrayList<HashMap<String, Object>> selectCashListByDate(String memberId, int year, int month, int date) throws Exception {
-		ArrayList<HashMap<String, Object>> list=null;
-		DBUtil dbUtil=null;
-		Connection conn=null;
-		PreparedStatement stmt=null;
-		ResultSet rs=null;
+		ArrayList<HashMap<String, Object>> list = null;
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		String sql = "SELECT c.cash_no cashNo"
 				+ ", c.cash_date cashDate"
 				+ ", c.cash_memo cashMemo"
@@ -32,15 +32,15 @@ public class CashDao {
 				+ " AND DAY(c.cash_date)=?"
 				+ " ORDER BY c.cash_date ASC, ct.category_kind ASC;";
 		try {
-			list=new ArrayList<HashMap<String, Object>>();
-			dbUtil=new DBUtil();
-			conn=dbUtil.getConnection();
-			stmt=conn.prepareStatement(sql);
+			list = new ArrayList<HashMap<String, Object>>();
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, year);
 			stmt.setInt(3, month);
 			stmt.setInt(4, date);
-			rs=stmt.executeQuery();
+			rs = stmt.executeQuery();
 			while(rs.next()) {
 				HashMap<String, Object> m = new HashMap<String, Object>();
 			     // m.put()
@@ -67,11 +67,11 @@ public class CashDao {
 	
 	// 호출 : cashList.jsp
 	public ArrayList<HashMap<String, Object>> selectCashListByMonth(String memberId, int year, int month) {
-		ArrayList<HashMap<String, Object>> list=null;
-		DBUtil dbUtil=null;
-		Connection conn=null;
-		PreparedStatement stmt=null;
-		ResultSet rs=null;
+		ArrayList<HashMap<String, Object>> list = null;
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		String sql = "SELECT c.cash_no cashNo"
 				+ ", c.cash_date cashDate"
 				+ ", c.cash_memo cashMemo"
@@ -85,14 +85,14 @@ public class CashDao {
 				+ " AND MONTH(c.cash_date)=?"
 				+ " ORDER BY c.cash_date ASC, ct.category_kind ASC;";
 		try {
-			list=new ArrayList<HashMap<String, Object>>();
-			dbUtil=new DBUtil();
-			conn=dbUtil.getConnection();
-			stmt=conn.prepareStatement(sql);
+			list = new ArrayList<HashMap<String, Object>>();
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, year);
 			stmt.setInt(3, month);
-			rs= stmt.executeQuery();
+			rs = stmt.executeQuery();
 			while(rs.next()) {
 				HashMap<String, Object> m = new HashMap<String, Object>();
 		         // m.put()
@@ -115,36 +115,6 @@ public class CashDao {
 	      }
 		return list;
 	}
-	
-	
-	// 수정하기~~~~~~~~~~~~~~~~
-	
-	// 관리자 : 멤버수 memberList.jsp
-			public int selectCashCount(String memberId, int year, int month, int date) throws Exception {
-				int cashListCnt=0;
-				
-				DBUtil dbUtil=new DBUtil();
-				Connection conn=dbUtil.getConnection();
-				String sql="SELECT COUNT(cash_no) cnt FROM cash WHERE member_id=? AND YEAR(cash_date)=? AND MONTH(cash_date)=? AND DAY(cash_date)=?";
-				PreparedStatement stmt=conn.prepareStatement(sql);
-				stmt.setString(1, memberId);
-				stmt.setInt(2, year);
-				stmt.setInt(3, month);
-				stmt.setInt(4, date);
-				ResultSet rs=stmt.executeQuery();
-				if(rs.next()) {
-					cashListCnt=rs.getInt("cnt");
-				}
-				
-				dbUtil.close(rs, stmt, conn);
-				return cashListCnt;
-			}
-	
-	
-	
-	
-	
-	
 	
 	// 가계부 내용 추가 insertCashAction.jsp
 	public int insertCashList(String memberId, Cash cash) {

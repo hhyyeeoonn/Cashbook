@@ -11,15 +11,26 @@
 	String id=request.getParameter("id");
 	String name=request.getParameter("name");
 	String pw=request.getParameter("pw");
+	String pw2=request.getParameter("pw2");
 	
 	
 	// 입력누락 확인
-	if((id == null) || (id.equals("")) || (name == null) || (name.equals("")) || (pw == null) || (pw.equals(""))) {
+	if((id == null) || (id.equals("")) || (name == null) || (name.equals("")) || (pw == null) || (pw.equals("")) || (pw2 == null) || (pw2.equals(""))) {	
 		String msg=URLEncoder.encode("빈칸에 내용을 입력하십시오.", "utf-8"); 
 		response.sendRedirect(request.getContextPath() + "/insertLoginForm.jsp?msg="+msg);
 		return;
 	}
-		System.out.println("빈칸 확인");
+		System.out.println("insertLoginAction:입력누락확인");
+	
+	if(pw != pw2 || !pw.equals(pw2)) {
+		String msg2=URLEncoder.encode("pw", "utf-8"); 
+		response.sendRedirect(request.getContextPath() + "/insertLoginForm.jsp?msg2="+msg2);
+		return;	
+	}
+		System.out.println("insertLoginAction:비밀번호일치여부확인");
+	
+		
+		
 	
 	Member paramMember = new Member();
 	paramMember.setMemberId(id);
