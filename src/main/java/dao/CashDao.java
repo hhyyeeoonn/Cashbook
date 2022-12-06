@@ -18,20 +18,21 @@ public class CashDao {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT c.cash_no cashNo"
-				+ ", c.cash_date cashDate"
-				+ ", c.cash_memo cashMemo"
-				+ ", c.cash_price cashPrice"
-				+ ", ct.category_kind categoryKind"
-				+ ", ct.category_name categoryName"
-				+ " FROM cash c INNER JOIN category ct"
-				+ " ON c.category_no=ct.category_no"
-				+ " WHERE c.member_id=?"
-				+ " AND YEAR(c.cash_date)=?"
-				+ " AND MONTH(c.cash_date)=?"
-				+ " AND DAY(c.cash_date)=?"
-				+ " ORDER BY c.cash_date ASC, ct.category_kind ASC;";
+		
 		try {
+			String sql = "SELECT c.cash_no cashNo"
+					+ ", c.cash_date cashDate"
+					+ ", c.cash_memo cashMemo"
+					+ ", c.cash_price cashPrice"
+					+ ", ct.category_kind categoryKind"
+					+ ", ct.category_name categoryName"
+					+ " FROM cash c INNER JOIN category ct"
+					+ " ON c.category_no=ct.category_no"
+					+ " WHERE c.member_id=?"
+					+ " AND YEAR(c.cash_date)=?"
+					+ " AND MONTH(c.cash_date)=?"
+					+ " AND DAY(c.cash_date)=?"
+					+ " ORDER BY c.cash_date ASC, ct.category_kind ASC;";
 			list = new ArrayList<HashMap<String, Object>>();
 			dbUtil = new DBUtil();
 			conn = dbUtil.getConnection();
@@ -72,19 +73,19 @@ public class CashDao {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT c.cash_no cashNo"
-				+ ", c.cash_date cashDate"
-				+ ", c.cash_memo cashMemo"
-				+ ", c.cash_price cashPrice"
-				+ ", ct.category_kind categoryKind"
-				+ ", ct.category_name categoryName"
-				+ " FROM cash c INNER JOIN category ct"
-				+ " ON c.category_no=ct.category_no"
-				+ " WHERE c.member_id=?"
-				+ " AND YEAR(c.cash_date)=?"
-				+ " AND MONTH(c.cash_date)=?"
-				+ " ORDER BY c.cash_date ASC, ct.category_kind ASC;";
 		try {
+			String sql = "SELECT c.cash_no cashNo"
+					+ ", c.cash_date cashDate"
+					+ ", c.cash_memo cashMemo"
+					+ ", c.cash_price cashPrice"
+					+ ", ct.category_kind categoryKind"
+					+ ", ct.category_name categoryName"
+					+ " FROM cash c INNER JOIN category ct"
+					+ " ON c.category_no=ct.category_no"
+					+ " WHERE c.member_id=?"
+					+ " AND YEAR(c.cash_date)=?"
+					+ " AND MONTH(c.cash_date)=?"
+					+ " ORDER BY c.cash_date ASC, ct.category_kind ASC;";
 			list = new ArrayList<HashMap<String, Object>>();
 			dbUtil = new DBUtil();
 			conn = dbUtil.getConnection();
@@ -122,12 +123,12 @@ public class CashDao {
 		DBUtil dbUtil=null;
 		Connection conn=null;
 		PreparedStatement stmt=null;
-		String sql = "INSERT INTO cash("
-				+ "category_no, member_id"
-				+ ", cash_date, cash_price"
-				+ ", cash_memo, updatedate, createdate)"
-				+ " values(?, ?, ?, ?, ?, CURDATE(), CURDATE())";
 		try {
+			String sql = "INSERT INTO cash("
+					+ "category_no, member_id"
+					+ ", cash_date, cash_price"
+					+ ", cash_memo, updatedate, createdate)"
+					+ " values(?, ?, ?, ?, ?, CURDATE(), CURDATE())";
 			dbUtil=new DBUtil();
 			conn=dbUtil.getConnection();
 			stmt=conn.prepareStatement(sql);
@@ -156,9 +157,12 @@ public class CashDao {
 		Connection conn=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
-		String sql = "SELECT cash_price cashPrice, cash_date cashDate, cash_memo cashMemo FROM cash WHERE cash_no=?";
-		
 		try {
+			String sql = "SELECT cash_price cashPrice,"
+					+ " cash_date cashDate,"
+					+ " cash_memo cashMemo"
+					+ " FROM cash"
+					+ " WHERE cash_no=?";
 			list2=new ArrayList<HashMap<String, Object>>();
 			dbUtil=new DBUtil();
 			conn=dbUtil.getConnection();
@@ -190,15 +194,14 @@ public class CashDao {
 		DBUtil dbUtil=null;
 		Connection conn=null;
 		PreparedStatement stmt=null;
-		String sql="UPDATE cash"
-				+ " SET category_no=?"
-				+ ", cash_date=?"
-				+ ", cash_price=?"
-				+ ", cash_memo=?"
-				+ ", updatedate=CURDATE()"
-				+ " WHERE cash_no=? AND member_id=?";
-		
 		try {
+			String sql="UPDATE cash"
+					+ " SET category_no=?"
+					+ ", cash_date=?"
+					+ ", cash_price=?"
+					+ ", cash_memo=?"
+					+ ", updatedate=CURDATE()"
+					+ " WHERE cash_no=? AND member_id=?";
 			dbUtil=new DBUtil();
 			conn=dbUtil.getConnection();
 			stmt=conn.prepareStatement(sql);

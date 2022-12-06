@@ -64,13 +64,14 @@ public class HelpDao {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT h.help_no helpNo, h.help_memo helpMemo, h.createdate helpCreatedate"
-				+ ", c.comment_memo commentMemo, c.createdate commentCreatedate"	
-				+ " FROM help h LEFT JOIN comment c"
-				+ " ON h.help_no=c.help_no"
-				+ " WHERE h.member_id=?"
-				+ " ORDER BY h.help_no DESC";
+		
 		try {
+			String sql = "SELECT h.help_no helpNo, h.help_memo helpMemo, h.createdate helpCreatedate"
+					+ ", c.comment_memo commentMemo, c.createdate commentCreatedate"	
+					+ " FROM help h LEFT JOIN comment c"
+					+ " ON h.help_no=c.help_no"
+					+ " WHERE h.member_id=?"
+					+ " ORDER BY h.help_no DESC";
 			dbUtil = new DBUtil();
 			conn=dbUtil.getConnection();
 			stmt=conn.prepareStatement(sql);
