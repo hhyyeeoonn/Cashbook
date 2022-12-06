@@ -15,15 +15,7 @@
 	String loginMemberId = loginMember.getMemberId();
 	
 	MemberDao memberDao = new MemberDao();
-	ArrayList<Member> myList = memberDao.selectMember(loginMemberId);
-	for(Member m : myList) {
-		Member member = new Member();
-		member.setMemberId(m.getMemberId());
-		member.setMemberLevel(m.getMemberLevel());
-		member.setMemberName(m.getMemberName());
-		member.setCreatedate(m.getCreatedate());
-	}
-	
+	ArrayList<Member> myList = memberDao.selectMember(loginMemberId);	
 %>
 
 
@@ -340,7 +332,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberId()%></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberName()%></span>
                                 <img class="img-profile rounded-circle"
                                     src="<%=request.getContextPath()%>/Resources/img/undraw_profile.svg">
                             </a>
@@ -349,10 +341,10 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="<%=request.getContextPath()%>/myInfo.jsp">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    회원정보수정
+                                    회원정보
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="<%=request.getContextPath()%>/logout.jsp" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     로그아웃
                                 </a>
@@ -375,13 +367,43 @@
 							 <!-- Project Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Calendar</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">My Information</h6>
                                 </div>
                                 <div class="card-body">
-                                 	
-                                 	
-                                 	<!--  -->
-                                   
+                                
+                                
+                                <!-- 내정보 조회 -->
+                                <table>
+                                <%
+                                	for(Member m : myList) {
+                                		String level = "";
+                                		if(m.getMemberLevel() == 0) {
+                                			level = "일반회원";
+                                		} else {
+                                			level = "관리자";
+                                		}
+                                %>
+                                	<tr>
+                                		<th>ID</th>
+                                		<td><%=m.getMemberId()%></td>
+                                	</tr>
+                                	<tr>
+                                		<th>Name</th>
+                                		<td><%=m.getMemberName()%></td>
+                                	</tr>
+                                	<tr>
+                                		<th>Level</th>
+                                		<td><%=level%></td>
+                                	</tr>
+                                	<tr>
+                                		<th>CreateDate</th>
+                                		<td><%=m.getCreatedate()%></td>
+                                	</tr>
+                                <%
+                                	}
+                                %>
+                                </table>	
+                                	
                                     
                                 </div>
                             </div>

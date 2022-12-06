@@ -97,18 +97,17 @@
 			<li class="nav-item">
 	    		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
 	        		<i class="fas fa-user-alt"></i>
-	        		<span>Pages</span>
+	        		<span>Admin</span>
 	    		</a>
 	    		<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 	        		<div class="bg-white py-2 collapse-inner rounded">
-	            		<h6 class="collapse-header">Login Screens:</h6>
-	            		<a class="collapse-item" href="login.html">Login</a>
-	            		<a class="collapse-item" href="register.html">Register</a>
-	            		<a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+	            		<h6 class="collapse-header">회원관리</h6>
+	            		<a class="collapse-item" href="<%=request.getContextPath()%>/admin/noticeList.jsp">공지사항</a>
+	            		<a class="collapse-item" href="<%=request.getContextPath()%>/admin/memberList.jsp">회원관리</a>
+	            		<a class="collapse-item" href="<%=request.getContextPath()%>/adminHelp/helpListAll.jsp">QnA</a>
 	            		<div class="collapse-divider"></div>
-	            		<h6 class="collapse-header">Other Pages:</h6>
-	            		<a class="collapse-item" href="404.html">404 Page</a>
-	            		<a class="collapse-item" href="blank.html">Blank Page</a>
+	            		<h6 class="collapse-header">사이트관리</h6>
+	            		<a class="collapse-item" href="<%=request.getContextPath()%>/admin/categoryList.jsp">카테고리관리</a>
 	        		</div>
 	    		</div>
 			</li>
@@ -125,15 +124,16 @@
 			<li class="nav-item">
 	    		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
 	        		<i class="far fa-calendar-alt"></i>
-	        		<span>Cashbook</span>
+	        		<span>Calendar</span>
 	    		</a>
 	    		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-	        		<div class="bg-white py-2 collapse-inner rounded">
-	            		<h6 class="collapse-header">Custom Components:</h6>
-	            		<a class="collapse-item" href="buttons.html">Buttons</a>
-	            		<a class="collapse-item" href="cards.html">Cards</a>
-	        		</div>
-	    		</div>
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">CashBook</h6>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
+                        <h6 class="collapse-header">Diary</h6>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Diary Calendar</a>
+                    </div>
+                </div>
 			</li>
 	
 		<!-- Nav Item - Charts -->
@@ -319,17 +319,17 @@
 						<li class="nav-item dropdown no-arrow">
           					<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
               					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              					<span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberId()%></span>
+              					<span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberName()%></span>
               					<img class="img-profile rounded-circle" src="<%=request.getContextPath()%>/Resources/img/undraw_profile.svg">
           					</a>
           <!-- Dropdown - User Information -->
             				<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                				<a class="dropdown-item" href="#">
+                				<a class="dropdown-item" href="<%=request.getContextPath()%>/myInfo.jsp">
                     				<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    				회원정보수정
+                    				회원정보
                 				</a>
                 				<div class="dropdown-divider"></div>
-                				<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                				<a class="dropdown-item" href="<%=request.getContextPath()%>/logout.jsp" data-toggle="modal" data-target="#logoutModal">
                     				<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     				로그아웃
                 				</a>
@@ -434,7 +434,7 @@
                 	    	<span aria-hidden="true">×</span>
                 		</button>
             		</div>
-            		<div class="modal-body">관리자페이지에서 로그아웃하시겠습니까?</div>
+            		<div class="modal-body">관리계정에서 로그아웃하시겠습니까?</div>
             		<div class="modal-footer">
                 		<button class="btn btn-secondary" type="button" data-dismiss="modal">아니오</button>
                 		<a class="btn btn-primary" href="<%=request.getContextPath()%>/logout.jsp">네</a>

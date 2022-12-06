@@ -145,7 +145,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
+           <!-- Heading -->
             <div class="sidebar-heading">
                 My List
             </div>
@@ -155,12 +155,14 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="far fa-calendar-alt"></i>
-                    <span>Cashbook</span>
+                    <span>Calendar</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
+                        <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
+                        <h6 class="collapse-header">Diary</h6>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Diary Calendar</a>
                     </div>
                 </div>
             </li>
@@ -170,7 +172,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
+              <!-- Heading -->
             <div class="sidebar-heading">
                 Member Service
             </div>
@@ -180,18 +182,12 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-user-alt"></i>
-                    <span>Pages</span>
+                    <span>고객지원</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <a class="collapse-item" href="login.html">공지사항</a>
+                        <a class="collapse-item" href="register.html">QnA</a>
                     </div>
                 </div>
             </li>
@@ -392,19 +388,19 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberId()%></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberName()%></span>
                                 <img class="img-profile rounded-circle"
                                     src="<%=request.getContextPath()%>/Resources/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="<%=request.getContextPath()%>/myInfo.jsp">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    회원정보수정
+                                    회원정보
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="<%=request.getContextPath()%>/logout.jsp" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     로그아웃
                                 </a>
@@ -434,6 +430,8 @@
                                  	
                                  	<!-- 달력 -->
 									<div>
+										<h6 class="m-0 text-center font-weight-bold text-primary"><%=month%>월</h6>
+										<br>
 										<table class="table table-bordered">
 											<tr>
 												<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
@@ -460,7 +458,7 @@
 														}
 														if(cnt > 0) {
 														%>
-															<mark style = "background-color : pink;">cash [<%=cnt%>]</mark>  <!-- object타입으로 들어가있어서 형변환필요 -->
+															<mark style = "background-color : pink;">cash <%=cnt%></mark>  <!-- object타입으로 들어가있어서 형변환필요 -->
 																<br>
 													<%	
 														}
@@ -510,7 +508,7 @@
 												%>
 											</table>
 											<div>
-												<a href="<%=request.getContextPath()%>/admin/noticeList.jsp">더 보기&rarr;</a>
+												<a href="<%=request.getContextPath()%>/cash/cashNoticeList2.jsp">더 보기&rarr;</a>
 											</div>
 											
 										</div>
