@@ -1,16 +1,18 @@
 package vo;
 
 public class Diary {
-	private int diaryId;
+	private int diaryNo;
 	private String memberId;
-	private String diaryMemo; // longtext
+	private String diaryTitle;
+	private String diaryMemo;// longtext
+	private String diaryDate;
 	private String updatedate;
 	private String createdate;
-	public int getDiaryId() {
-		return diaryId;
+	public int getDiaryNo() {
+		return diaryNo;
 	}
-	public void setDiaryId(int diaryId) {
-		this.diaryId = diaryId;
+	public void setDiaryNo(int diaryNo) {
+		this.diaryNo = diaryNo;
 	}
 	public String getMemberId() {
 		return memberId;
@@ -18,11 +20,23 @@ public class Diary {
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
+	public String getDiaryTitle() {
+		return diaryTitle;
+	}
+	public void setDiaryTitle(String diaryTitle) {
+		this.diaryTitle = diaryTitle;
+	}
 	public String getDiaryMemo() {
 		return diaryMemo;
 	}
 	public void setDiaryMemo(String diaryMemo) {
 		this.diaryMemo = diaryMemo;
+	}
+	public String getDiaryDate() {
+		return diaryDate;
+	}
+	public void setDiaryDate(String diaryDate) {
+		this.diaryDate = diaryDate;
 	}
 	public String getUpdatedate() {
 		return updatedate;
@@ -36,5 +50,5 @@ public class Diary {
 	public void setCreatedate(String createdate) {
 		this.createdate = createdate;
 	}
-	
+		
 }

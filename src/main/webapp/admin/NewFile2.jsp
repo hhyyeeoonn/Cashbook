@@ -2,6 +2,7 @@
 <%@ page import="vo.*" %>
 <%@ page import="dao.*" %>
 <%@ page import="java.util.*" %>
+
 <%
 	//Controller
 	Member loginMember=(Member)session.getAttribute("loginMember"); 
@@ -13,62 +14,110 @@
 		return;
 	}
 	
-
+	int currentPage=1;
+	if(request.getParameter("currentPage") != null) {
+		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+	}
+	
+	
 	// Model 호출
-	CategoryDao categoryDao=new CategoryDao();
-	ArrayList<Category> categoryList=categoryDao.selectCategoryListByAdmin();
+	int rowPerPage=5;
+	int beginRow=(currentPage-1) * rowPerPage;
+	
+	NoticeDao noticeDao = new NoticeDao();
+	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
+	int noticeLastPage = noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
+	
+	MemberDao memberDao = new MemberDao();
+	ArrayList<Member> memberList=memberDao.selectMemberlistByPage(beginRow, rowPerPage);
+	int memberLastPage=memberDao.selectMemberPageCount(rowPerPage);
+
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>categoryList</title>
+<title>memberList</title>
 </head>
 <body>
 	<ul>
 		<li>
 			<a href="<%=request.getContextPath()%>/admin/adminMain.jsp">관리자페이지</a>
-			<a href="<%=request.getContextPath()%>/admin/noticeList.jsp">공지관리</a>
-			<a href="<%=request.getContextPath()%>/admin/memberList.jsp">회원관리</a>
+			<a href="<%=request.getContextPath()%>/admin/categoryList.jsp">공지관리</a>
+			<a href="<%=request.getContextPath()%>/admin/categoryList.jsp">카테고리관리</a>
 			<a href="">QnA</a>
 		</li>
 	</ul>
 	
-	<!-- categoryList contents... -->
+	<!-- memberList contents... -->
 	<div>
-		<h1>카테고리 목록</h1>
-		<br>
-		<div>
-			<a href="<%=request.getContextPath()%>/admin/insertCategoryList.jsp">카테고리 추가</a>
-		</div>
-		<table>
-			<tr>
-				<th>수입/지출</th>
-				<th>이름</th>	
-				<th>마지막 수정날짜</th>
-				<th>생성날짜</th>
-				<th></th>	
-				<th></th>		
-			</tr>
-			<%
-				for(Category c:categoryList) {
-			%>
+		<h1>회원목록</h1>
+			<br>
+			<table>
 				<tr>
-					<td><%=c.getCategoryKind()%></td>
-					<td><%=c.getCategoryName()%></td>
-					<td><%=c.getUpdatedate()%></td>
-					<td><%=c.getCreatedate()%></td>
-					<td>
-						<a href="<%=request.getContextPath()%>/admin/updateCategoryList.jsp?categoryNo=<%=c.getCategoryNo()%>">수정</a>
-					</td>
-					<td>
-						<a href="<%=request.getContextPath()%>/admin/deleteCategoryList.jsp?categoryNo=<%=c.getCategoryNo()%>">삭제</a>
-					</td>
+					<th>회원번호</th>
+					<th>아이디</th>
+					<th>레벨</th>
+					<th>이름</th>
+					<th>마지막수정날짜</th>
+					<th>생성일자</th>
+					<th></th> <!-- memberNo로 membeLevel 수정 -->
+					<th></th>
 				</tr>
+				<%
+					for(Member b:memberList) {
+						String level="관리자";
+						if((b.getMemberLevel()) == 0) {
+							level="일반회원";
+						}
+				%>
+						<tr>
+							<td><%=b.getMemberNo()%></td>
+							<td><%=b.getMemberId()%></td>
+							<td><%=level%></td>
+							<td><%=b.getMemberName()%></td>
+							<td><%=b.getUpdatedate()%></td>
+							<td><%=b.getCreatedate()%></td>
+							<td>
+								<a href="<%=request.getContextPath()%>/admin/updateMemberLevel.jsp?memberNo=<%=b.getMemberNo()%>">등급수정</a>
+							</td>
+							<td>
+								<a href="<%=request.getContextPath()%>/admin/deleteMemberList.jsp?memberNo=<%=b.getMemberNo()%>">회원추방</a>
+							</td>
+						</tr>
+				<%
+					}
+				%>
+			</table>
+			<span>
+			<%
+				if(currentPage > 1) {
+			%>
+					<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=1">처음</a>
+					<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage-1%>">이전</a>
 			<%
 				}
 			%>
-		</table>
+		</span>
+		<span><%=currentPage%></span>
+		<span>
+			<%
+				if(currentPage < memberLastPage) { 
+			%>
+					<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage+1%>">다음</a>
+			<%
+				}
+			%>		
+		</span>
+		<span>
+			<%
+				if(currentPage < memberLastPage) {
+			%>
+				<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=memberLastPage%>">마지막</a>
+			<%
+				}
+			%>
+		</span>
 	</div>
 </body>
 </html>

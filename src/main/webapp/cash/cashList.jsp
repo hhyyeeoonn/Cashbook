@@ -154,7 +154,7 @@
                         <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
                         <h6 class="collapse-header">Diary</h6>
-                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Diary Calendar</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/diary/diaryList.jsp">Diary Calendar</a>
                     </div>
                 </div>
             </li>

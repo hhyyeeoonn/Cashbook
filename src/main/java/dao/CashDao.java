@@ -12,7 +12,7 @@ import util.DBUtil;
 public class CashDao {
 
 	// 호출 : cashDateList.jsp
-	public ArrayList<HashMap<String, Object>> selectCashListByDate(String memberId, int year, int month, int date) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectCashListByDate(String memberId, int year, int month, int date) {
 		ArrayList<HashMap<String, Object>> list = null;
 		DBUtil dbUtil = null;
 		Connection conn = null;
