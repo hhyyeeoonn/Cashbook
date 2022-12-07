@@ -406,6 +406,10 @@
                                 	
                                     
                                 </div>
+                                <button type = "button" onclick = "lacation.href ='<%=request.getRequestURL()%>/updateMemberForm.jsp'">
+                                	회원정보수정
+                                </button>
+                                
                             </div>
 						</div>
 							

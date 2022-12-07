@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>\
 <%@ page import = "vo.*" %>
 <%@ page import = "dao.*" %>
-<%@ page import="java.net.*" %>
+<%//@ page import="java.net.*" %>
 <%
 	// 뷰가 없는 구조 M도 여기에 있는 것이 아니라 호출하는 것이라 실질적으로는 C만 있는 페이지
 	// C
@@ -10,11 +10,12 @@
 
 	// request 유효성 검증
 		if((memberId == null) || (memberId.equals("")) || (memberPw == null) || (memberPw.equals(""))) {
-			String msg=URLEncoder.encode("아이디와 비밀번호를 확인하십시오.", "utf-8");
+			//String msg=URLEncoder.encode("아이디와 비밀번호를 확인하십시오.", "utf-8");
+			String msg = "check";
 			response.sendRedirect(request.getContextPath()+"/loginForm.jsp?msg="+msg);
 			return;
 		}
-			System.out.println("=빈칸확인=");
+			System.out.println("loginAction:확인");
 	
 	
 	Member paramMember = new Member();
@@ -33,11 +34,12 @@
 	} else if(resultMember != null) { 
 		session.setAttribute("loginMember", resultMember);	
 	} else {
-		String msg=URLEncoder.encode("아이디와 비밀번호를 확인하십시오.", "utf-8");
+		//String msg=URLEncoder.encode("아이디와 비밀번호를 확인하십시오.", "utf-8");
+		String msg = "check";
 		response.sendRedirect(request.getContextPath()+"/loginForm.jsp?msg="+msg);
 		return;
 	}
-
+		System.out.println("loginAction:확인2");
 	// redirect
 	response.sendRedirect(request.getContextPath()+redirectUrl);
 %>

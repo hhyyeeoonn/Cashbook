@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	String msg = request.getParameter("msg");
+	String loginMsg = request.getParameter("loginMsg");	
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +50,7 @@
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
                                     <%
-                                    	if(request.getParameter("msg") != null) {
+                                    	if(msg != null) {
                                     %>
                              			<div class="text-center">
                                     		<div class="alert alert-danger alert-dismissible">
@@ -56,7 +60,18 @@
 										</div>
                                     <%
                                     	}
+                                    	if(loginMsg != null) {
                                     %>
+                                    	<div class="text-center">
+                                    		<div class="alert alert-success alert-dismissible">
+  												<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  												<small>가입을 환영합니다!</small>
+											</div>
+										</div>
+                                    <%
+                                    	}
+                                    %>
+                                    
                                     
                                     <form class="user" action="<%=request.getContextPath()%>/loginAction.jsp" method="post">
                                         <div class="form-group">

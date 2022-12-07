@@ -29,8 +29,6 @@
 	if(deleteMember == 1) { 
 		session.invalidate();
 		response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
-		System.out.println("탈퇴성공");
-	} else {
-		System.out.println("탈퇴실패");
-	}
+		System.out.println("deleteMemberAction:탈퇴");
+	} 
 %>

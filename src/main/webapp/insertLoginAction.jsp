@@ -3,7 +3,7 @@
 <%@ page import = "dao.*" %>
 <%@page import = "util.*" %>
 <%@ page import = "java.sql.*" %>
-<%@ page import="java.net.*" %>
+<%//@ page import="java.net.*" %>
 
 <!-- 회원가입 로그인 로그아웃 -->
 <%
@@ -16,14 +16,16 @@
 	
 	// 입력누락 확인
 	if((id == null) || (id.equals("")) || (name == null) || (name.equals("")) || (pw == null) || (pw.equals("")) || (pw2 == null) || (pw2.equals(""))) {	
-		String msg=URLEncoder.encode("빈칸에 내용을 입력하십시오.", "utf-8"); 
+		//String msg=URLEncoder.encode("빈칸에 내용을 입력하십시오.", "utf-8"); 
+		String msg = "insert";
 		response.sendRedirect(request.getContextPath() + "/insertLoginForm.jsp?msg="+msg);
 		return;
 	}
 		System.out.println("insertLoginAction:입력누락확인");
 	
 	if(pw != pw2 || !pw.equals(pw2)) {
-		String msg2=URLEncoder.encode("pw", "utf-8"); 
+		//String msg2=URLEncoder.encode("pw", "utf-8");
+		String msg2 = "wrong";
 		response.sendRedirect(request.getContextPath() + "/insertLoginForm.jsp?msg2="+msg2);
 		return;	
 	}
@@ -52,7 +54,8 @@
 		System.out.println(row + "<<-insertMemberAction.jsp:row");
 	
 	if(row == 1) {
-		String loginMsg=URLEncoder.encode("가입을 환영합니다. 로그인 하십시오.", "utf-8");
+		//String loginMsg=URLEncoder.encode("가입을 환영합니다. 로그인 하십시오.", "utf-8");
+		String loginMsg = "enter";
 		response.sendRedirect(request.getContextPath() + "/loginForm.jsp?loginMsg="+loginMsg);
 	} 
 %>
