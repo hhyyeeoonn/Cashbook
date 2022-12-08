@@ -445,16 +445,28 @@
 															</div>
 															<div>
 											<%
+																int cnt = 0;
+																int cnt2 = 0;
 																for(HashMap<String, Object> m:list) {
 																	String cashDate=(String)(m.get("cashDate"));
+																	String categoryKind = (String)(m.get("categoryKind"));
 																	if(Integer.parseInt(cashDate.substring(8)) == date) {
+																		if(categoryKind != null && categoryKind.equals("수입")) {
+																			++cnt;
+																		} else if(categoryKind != null && categoryKind.equals("지출")) {
+																			++cnt2;
+																		}
+																		if(categoryKind.equals("수입")) {
 											%>
-																		[<%=(String)(m.get("categoryKind"))%>]  <!-- object타입으로 들어가있어서 형변환필요 -->
-																		<%=(String)(m.get("categoryName"))%>
-																		&nbsp;
-																		<%=(Long)(m.get("cashPrice"))%>원
+																		<%="수입 : "+ cnt %>
 																		<br>	
 											<%
+																		} else if(categoryKind.equals("지출")) {
+											%>								
+																		<%="지출 : "+ cnt2%>
+																		<br>
+											<% 								
+																		}
 																	}
 																}
 															}

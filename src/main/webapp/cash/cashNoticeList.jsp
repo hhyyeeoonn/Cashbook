@@ -458,7 +458,9 @@
 														}
 														if(cnt > 0) {
 														%>
-															<mark style = "background-color : pink;">cash <%=cnt%></mark>  <!-- object타입으로 들어가있어서 형변환필요 -->
+															<mark style = "background-color : pink;">
+																<a href = "<%=request.getContextPath()%>/cash/cashDateList.jsp?year=<%=year%>&month=<%=month+1%>&date=<%=date%>">cash <%=cnt%></a>
+															</mark>  <!-- object타입으로 들어가있어서 형변환필요 -->
 																<br>
 													<%	
 														}

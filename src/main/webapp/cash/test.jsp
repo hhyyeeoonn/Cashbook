@@ -67,23 +67,7 @@
 	
 	// Model 호출 : 일별 cash 목록
 	CashDao cashDao = new CashDao();
-	ArrayList<HashMap<String, Object>> list2 = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
-	int date2=0;
-	String cashDay=null;
-	for(HashMap<String, Object> c:list2) {
-		String day=(String)(c.get("cashDate"));
-		date2=Integer.parseInt(day.substring(8));
-	}
-	
-	int cashListCnt=cashDao.selectCashCount(loginMember.getMemberId(), year, month+1, date2);
-	
-	// Model 호출 : notice list
-	int rowPerPage=5;
-	int beginRow=(currentPage-1) * rowPerPage;
-	
-	NoticeDao noticeDao = new NoticeDao();
-	ArrayList<Notice> list = noticeDao.selectNoticeListByPage(beginRow, rowPerPage); // 출력될 페이지내용들
-	int noticeLastPage=noticeDao.selectNoticeCount(rowPerPage); // -> lastPage 
+	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
 %>
 
 
@@ -163,12 +147,14 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="far fa-calendar-alt"></i>
-                    <span>Cashbook</span>
+                    <span>Calendar</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
+                        <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
+                        <h6 class="collapse-header">Diary</h6>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/diary/diaryList.jsp">Diary Calendar</a>
                     </div>
                 </div>
             </li>
@@ -188,18 +174,12 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-user-alt"></i>
-                    <span>Pages</span>
+                    <span>고객지원</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <a class="collapse-item" href="login.html">공지사항</a>
+                        <a class="collapse-item" href="register.html">QnA</a>
                     </div>
                 </div>
             </li>
@@ -226,7 +206,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content">
+			<div id="content">
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -400,16 +380,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberId()%></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=loginMember.getMemberName()%></span>
                                 <img class="img-profile rounded-circle"
                                     src="<%=request.getContextPath()%>/Resources/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="<%=request.getContextPath()%>/myInfo.jsp">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    회원정보수정
+                                    회원정보
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -425,7 +405,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">                   
+				<div class="container-fluid">                   
 
                     <!-- Content Row -->
                     <div class="row">
@@ -442,96 +422,66 @@
                                  	
                                  	<!-- 달력 -->
 									<div>
-										<table class="table table-bordered">
+										<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">[< 이전달]</a>
+										<%=year%>년 <%=month + 1%>월 
+										<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">[다음달 >]</a>
+									</div>
+									<div>
+										<table border=1>
 											<tr>
 												<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
 											</tr>
 											<tr>
-										<%
-											for (int i=1; i<totalTd; i++) {
-										%>
-												<td>
-										<%
-													int date = i-beginBlank;
-													if(date > 0 && date <= lastDate) {
-										%>
-													
-													<div><%=date%></div>
-													<div>
-												
-														<%
-															String cashDate=null;
-															if(cashListCnt != 0) {
-																cashDate="cash"+cashListCnt;
-														%>
-																		<%=cashDate%>
+											<%
+												for (int i=1; i<totalTd; i++) {
+											%>
+													<td>
+											<%
+														int date = i-beginBlank;
+														if(date > 0 && date <= lastDate) {
+											%>
+															<div>
+																<a href="<%=request.getContextPath()%>/cash/cashDateList.jsp?year=<%=year%>&month=<%=month+1%>&date=<%=date%>"><%=date%></a>
+															</div>
+															<div>
+											<%
+																for(HashMap<String, Object> m:list) {
+																	String cashDate=(String)(m.get("cashDate"));
+																	if(Integer.parseInt(cashDate.substring(8)) == date) {
+											%>
+																		[<%=(String)(m.get("categoryKind"))%>]  <!-- object타입으로 들어가있어서 형변환필요 -->
+																		<%=(String)(m.get("categoryName"))%>
+																		&nbsp;
+																		<%=(Long)(m.get("cashPrice"))%>원
 																		<br>	
-													<%	
+											<%
+																	}
+																}
 															}
-																
+																	//System.out.println(date);
+											%>
+															</div>
+														</td>
+											<% 
+														if(i % 7 == 0 && i != totalTd) {
+											%>
+															</tr><tr> <!-- td 7개 만들고 테이블 줄바꿈 -->
+											<%
 														}
-													
-													%>
-													</div>
-												</td>
-										<% 
-												if(i % 7 == 0 && i != totalTd) {
-										%>
-												</tr><tr> <!-- td 7개 만들고 테이블 줄바꿈 -->
-										<%
-												}
-											}
-										%>
-											</tr>
-											<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
+													}
+											%>
+														</tr>
+												<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
 										</table>
-									</div>  
-                                   
-                                    
+									</div>
                                 </div>
                             </div>
 						</div>
-							
-						 <div class="col-lg-6 mb-4">
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
-                                </div>
-                                <div class="card-body">
-                                    <!-- 공지목록-->
-										<div>
-											<table>
-												<%
-													for(Notice n: list) {
-														String noticeDate=n.getCreatedate();
-												%>
-													<tr>
-														<td><%=n.getNoticeMemo()%></td>
-														<td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%=noticeDate.substring(0, 10)%></td>
-													</tr>
-												<%
-													}
-												%>
-											</table>
-											<div>
-												<a href="<%=request.getContextPath()%>/admin/noticeList.jsp">더 보기&rarr;</a>
-											</div>
-											
-										</div>
-										<!--  
-										<a target="_blank" rel="nofollow" href="<%=request.getContextPath()%>/"> 공지사항 &rarr;</a>
-										-->
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
+					</div>
+				</div>
                 <!-- /.container-fluid -->
-
-            </div>
+	
+			</div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
