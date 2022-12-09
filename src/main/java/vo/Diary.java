@@ -3,7 +3,6 @@ package vo;
 public class Diary {
 	private int diaryNo;
 	private String memberId;
-	private String diaryTitle;
 	private String diaryMemo;// longtext
 	private String diaryDate;
 	private String updatedate;
@@ -19,12 +18,6 @@ public class Diary {
 	}
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
-	}
-	public String getDiaryTitle() {
-		return diaryTitle;
-	}
-	public void setDiaryTitle(String diaryTitle) {
-		this.diaryTitle = diaryTitle;
 	}
 	public String getDiaryMemo() {
 		return diaryMemo;
@@ -50,5 +43,5 @@ public class Diary {
 	public void setCreatedate(String createdate) {
 		this.createdate = createdate;
 	}
-		
+
 }

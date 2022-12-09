@@ -91,6 +91,25 @@
     <!-- Custom styles for this template-->
     <link href="<%=request.getContextPath()%>/Resources/css/sb-admin-2.min.css" rel="stylesheet">
 
+	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+
+	<style>
+ 		 
+ 		 table, th, td {
+   		 	border: 1px solid #bcbcbc;
+		 }
+  
+  		table {
+    		width: 80%;
+  		}
+	
+	</style>
+
+
+
+
+
 </head>
 
 <body id="page-top">
@@ -407,31 +426,46 @@
                 <!-- Begin Page Content -->
 				<div class="container-fluid">                   
 
+
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="col-lg-6 mb-4">
+                        <div class="col-lg-11 mb-4" style = "margin:0 auto;"> <!-- col-lg-10 : 12까지만-->
 
 
 							 <!-- Project Card Example -->
+							<div class = "container center-block">
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Calendar</h6>
-                                </div>
-                                <div class="card-body">
+                        		<div class="card-header py-3">
+                           			<h6 class="m-0 font-weight-bold text-primary">Cash Calendar</h6>
+                       			</div>
+                        		<div class="card-body">
                                  	
                                  	
                                  	<!-- 달력 -->
-									<div>
-										<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">[< 이전달]</a>
-										<%=year%>년 <%=month + 1%>월 
-										<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">[다음달 >]</a>
+									<div>	
+										<h6 class="m-0 text-center font-weight-bold text-primary"> <%=year%>년 <%=month + 1%>월</h6>
 									</div>
 									<div>
-										<table border=1>
-											<tr>
-												<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
-											</tr>
-											<tr>
+										<span class = "float-left">
+											<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">
+												<i class='fas fa-angle-left' style='font-size:24px'></i>
+											</a>
+										</span>
+										<span class = "float-right">											
+											<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">
+												<i class='fas fa-angle-right' style='font-size:24px'></i>
+											</a>
+										</span>						
+									</div>
+									<div>
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+												</tr>
+												<tr>
+											</thead>
+											<tbody>
 											<%
 												for (int i=1; i<totalTd; i++) {
 											%>
@@ -442,53 +476,64 @@
 											%>
 															<div>
 																<a href="<%=request.getContextPath()%>/cash/cashDateList.jsp?year=<%=year%>&month=<%=month+1%>&date=<%=date%>"><%=date%></a>
-															</div>
+															</div>															
 															<div>
 											<%
 																int cnt = 0;
 																int cnt2 = 0;
+																String money = "수입 : "+cnt+"<br>"+"지출 : "+cnt2;
 																for(HashMap<String, Object> m:list) {
 																	String cashDate=(String)(m.get("cashDate"));
 																	String categoryKind = (String)(m.get("categoryKind"));
 																	if(Integer.parseInt(cashDate.substring(8)) == date) {
-																		if(categoryKind != null && categoryKind.equals("수입")) {
-																			++cnt;
-																		} else if(categoryKind != null && categoryKind.equals("지출")) {
-																			++cnt2;
-																		}
 																		if(categoryKind.equals("수입")) {
-											%>
-																		<%="수입 : "+ cnt %>
-																		<br>	
-											<%
-																		} else if(categoryKind.equals("지출")) {
-											%>								
-																		<%="지출 : "+ cnt2%>
-																		<br>
-											<% 								
+																			++cnt;
+																		} else {
+																			++cnt2;
 																		}
 																	}
 																}
-															}
-																	//System.out.println(date);
+																if(cnt > 0 && cnt2 == 0){
+											%> 
+																			수입 : <%=cnt%>
+																			<br>
+											<%								
+																} else if(cnt == 0 && cnt2 > 0) {
+											%>
+																			지출 : <%=cnt2%>
+																			<br> 
+											<%
+																} else if (cnt > 0 && cnt2 >0) {									
+											%>
+																			수입 : <%=cnt%> <br>
+																			지출 : <%=cnt2%>
+											<% 
+																}
 											%>
 															</div>
 														</td>
 											<% 
+														}
 														if(i % 7 == 0 && i != totalTd) {
 											%>
 															</tr><tr> <!-- td 7개 만들고 테이블 줄바꿈 -->
 											<%
-														}
 													}
+												}
 											%>
 														</tr>
 												<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
+											</tbody>
 										</table>
-									</div>
-                                </div>
-                            </div>
+									</div> <!-- 달력 끝 -->
+										
+                           		 </div>
+                            
+                           </div>
+                           </div><!-- card -->
 						</div>
+						
+						
 					</div>
 				</div>
                 <!-- /.container-fluid -->

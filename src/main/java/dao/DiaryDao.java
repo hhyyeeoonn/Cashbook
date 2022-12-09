@@ -7,16 +7,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import util.DBUtil;
-import vo.Diary;
+import vo.*;
 
 public class DiaryDao {
-	
+		
+	/*
 	public ArrayList<Member> list selectDiaryAndCashList(String memberId, int year, int month, int date) {
-		DBUtil dbUtil = new DBUtil();
+		ArrayList<Member> list = null;
+		DBUtil dbUtil = null;
 		Connection conn = null;
 		PreparedStatement stmt = null; 
-	}
+		ResultSet rs = null;
 	
+		try {
+			String sql = "SELECT diary_no diaryNo"
+					+ " di"
+			dbUtil = new DBUtil();
+		}
+	
+	}
+	*/
 	
 	public ArrayList<HashMap<String, Object>> selectDiaryListByDate(String memberId, int year, int month, int date) {
 		ArrayList<HashMap<String, Object>> list = null;
@@ -30,7 +40,6 @@ public class DiaryDao {
 			dbUtil = new DBUtil();
 			conn = dbUtil.getConnection();
 			String sql = "SELECT diary_no diaryNo,"
-					+ " diary_title diaryTitle,"
 					+ " diary_memo diaryMemo,"
 					+ " diary_date diaryDate"
 					+ " FROM diary"
@@ -48,7 +57,6 @@ public class DiaryDao {
 			while(rs.next()) {
 				HashMap<String, Object> d = new HashMap<String, Object>();
 				d.put("diaryNo", rs.getInt("diaryNo"));
-				d.put("diaryTitle", rs.getString("diaryTitle"));
 				d.put("diaryMemo", rs.getString("diaryMemo"));
 				d.put("diaryDate", rs.getString("diaryDate"));
 				list.add(d);
@@ -77,7 +85,6 @@ public class DiaryDao {
 			dbUtil = new DBUtil();
 			conn = dbUtil.getConnection();
 			String sql = "SELECT diary_no diaryNo,"
-					+ " diary_title diaryTitle,"
 					+ " diary_memo diaryMemo,"
 					+ " diary_date diaryDate"
 					+ " FROM diary"
@@ -93,7 +100,6 @@ public class DiaryDao {
 			while(rs.next()) {
 				HashMap<String, Object> d = new HashMap<String, Object>();
 				d.put("diaryNo", rs.getInt("diaryNo"));
-				d.put("diaryTitle", rs.getString("diaryTitle"));
 				d.put("diaryMemo", rs.getString("diaryMemo"));
 				d.put("diaryDate", rs.getString("diaryDate"));
 				list.add(d);
@@ -123,12 +129,12 @@ public class DiaryDao {
 			dbUtil = new DBUtil();	
 			conn = dbUtil.getConnection();
 			String sql="INSERT INTO diary("
-					+ "diary_title, diary_memo, member_id, updatedate, createdate)"
+					+ "diary_memo, member_id, diary_date, updatedate, createdate)"
 					+ " VALUES(?, ?, ?, NOW(), NOW())";
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, diary.getDiaryTitle());
-			stmt.setString(2, diary.getDiaryMemo());
-			stmt.setString(3, diary.getMemberId());
+			stmt.setString(1, diary.getDiaryMemo());
+			stmt.setString(2, diary.getMemberId());
+			stmt.setString(3, diary.getDiaryDate());
 			row = stmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -199,5 +205,5 @@ public class DiaryDao {
 			}
 		}
 		return row;
-	}
+	}	
 }
