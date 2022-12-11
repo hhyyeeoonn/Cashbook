@@ -1,36 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import = "vo.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page import = "vo.*"%>
 <%@ page import = "dao.*" %>
 <%
-	// Controller
+	//Controller
 	Member loginMember = (Member)session.getAttribute("loginMember");
 	
 	if(loginMember == null) { // 로그인 되지 않은 상태
-		System.out.println("insertDiaryAction:로그인확인");
+		System.out.println("updateDiaryAction:session확인");
 		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
 		return;
-	}		
+	}	
 	
 	request.setCharacterEncoding("utf-8");
-	String diaryDate = request.getParameter("diaryDate");
-	String diaryMemo = request.getParameter("memo");
-	String memberId = request.getParameter("memberId");
+	int diaryNo = Integer.parseInt(request.getParameter("diaryNo"));
 	String year = request.getParameter("year");
 	String month = request.getParameter("month");
 	String date = request.getParameter("date");
-	System.out.println("insertDiaryAction:y:"+year+"/m:"+month+"/d"+date);
-	
-	
-	
+	String diaryMemo = request.getParameter("memo");
 	
 	Diary diary = new Diary();
+	diary.setDiaryNo(diaryNo);
+	diary.setMemberId(loginMember.getMemberId());
 	diary.setDiaryMemo(diaryMemo);
-	diary.setMemberId(memberId);
-	diary.setDiaryDate(diaryDate);
 	
+	// model
 	DiaryDao diaryDao = new DiaryDao();
-	int row = diaryDao.inserDiarytMemo(diary);
-		System.out.println("insertDiaryAction:입력성공");
+	diaryDao.updateDiaryMemo(diary);
+	System.out.println("updatetDiaryAction:수정완료");
 	response.sendRedirect(request.getContextPath() + "/diary/diaryDateList.jsp?year="+year+"&month="+month+"&date="+date);
-
 %>

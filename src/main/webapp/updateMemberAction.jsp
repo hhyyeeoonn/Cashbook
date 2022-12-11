@@ -33,7 +33,7 @@
 		response.sendRedirect(request.getContextPath() + "/cash/cashList.jsp");
 		System.out.println("수정성공");
 	} else {
-		String msg=URLEncoder.encode("비밀번호를 확인하세요.", "utf-8");
+		String msg=URLEncoder.encode("wrong", "utf-8");
 		response.sendRedirect(request.getContextPath() + "/updateMemberForm.jsp?msg="+msg);
 		System.out.println("수정실패");
 	}

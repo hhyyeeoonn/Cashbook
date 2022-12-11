@@ -21,8 +21,8 @@
 
 
 	// Model 호출
-		CategoryDao categoryDao=new CategoryDao();
-		ArrayList<Category> categoryList=categoryDao.selectCategoryListByAdmin();
+	CategoryDao categoryDao=new CategoryDao();
+	ArrayList<Category> categoryList=categoryDao.selectCategoryListByAdmin();
 %>
 
 
@@ -124,7 +124,7 @@
                         <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
                         <h6 class="collapse-header">Diary</h6>
-                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Diary Calendar</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/diary/diaryList.jsp">Diary Calendar</a>
                     </div>
                 </div>
 			</li>
@@ -336,59 +336,96 @@
 <!-- Begin Page Content -->
 				<div class="container-fluid">                   
     <!-- Content Row -->
-					<div class="row">
-				<!-- 최근 공지 -->
-      					<div class="col-lg-6 mb-4">
-          					<div class="card shadow mb-4">
-              					<div class="card-header py-3">
-                  					<h6 class="m-0 font-weight-bold text-primary">최근 공지사항</h6>
-              					</div>
-              					<div class="card-body">
-              
-						
-						<!-- categoryList contents... -->
-									<div>
-										<h1>카테고리 목록</h1>
-										<br>
+					 <div class="row">
+                        <div class="col-lg-11 mb-4" style = "margin:0 auto;"> <!-- col-lg-10 : 12까지만-->
+				
+							
+							<div class = "container center-block">
+	                            <div class="card shadow mb-4">
+	                        		<div class="card-header py-3">
+	                           			<h6 class="m-0 font-weight-bold text-primary">Insert New Category</h6>
+	                       			</div>
+	                        		<div class="card-body">
 										<div>
-											<a href="<%=request.getContextPath()%>/admin/insertCategoryList.jsp">카테고리 추가</a>
+											<form action="<%=request.getContextPath()%>/admin/insertCategoryAction.jsp" method="post">
+													<%
+														if((request.getParameter("msg")) != null) {
+													%>
+															<%=request.getParameter("msg")%>
+													<%
+														}
+														
+														if((request.getParameter("NmMsg")) != null) {
+													%>
+															<%=request.getParameter("NmMsg")%>
+													<%
+														}
+													%>
+													<div>
+														categoryKind :&nbsp;
+														<input type="radio" name="categoryKind" value="수입">수입
+														<input type="radio" name="categoryKind" value="지출">지출
+													</div>
+													<div>
+														categoryName :&nbsp;
+														<input type="text" name="categoryName">
+													</div>
+													<br>
+													<button type="submit" class="btn btn-primary">새카테고리 입력</button>
+												</form>
 										</div>
-										<table>
-											<tr>
-												<th>수입/지출</th>
-												<th>이름</th>	
-												<th>마지막 수정날짜</th>
-												<th>생성날짜</th>
-												<th></th>	
-												<th></th>		
-											</tr>
-											<%
-												for(Category c:categoryList) {
-											%>
-												<tr>
-													<td><%=c.getCategoryKind()%></td>
-													<td><%=c.getCategoryName()%></td>
-													<td><%=c.getUpdatedate()%></td>
-													<td><%=c.getCreatedate()%></td>
-													<td>
-														<a href="<%=request.getContextPath()%>/admin/updateCategoryList.jsp?categoryNo=<%=c.getCategoryNo()%>">수정</a>
-													</td>
-													<td>
-														<a href="<%=request.getContextPath()%>/admin/deleteCategoryList.jsp?categoryNo=<%=c.getCategoryNo()%>">삭제</a>
-													</td>
-												</tr>
-											<%
-												}
-											%>
-										</table>
 									</div>
+								</div>
+							</div>
+	
+					<!-- 최근 공지 -->
+	      					<div class = "container center-block">
+	                            <div class="card shadow mb-4">
+	                        		<div class="card-header py-3">
+	                           			<h6 class="m-0 font-weight-bold text-primary">Category List</h6>
+	                       			</div>
+	                        		<div class="card-body">
+	              
+							<!-- categoryList contents... -->
+										<div>
+											<table class="table table-bordered">
+												<tr>
+													<th>수입/지출</th>
+													<th>이름</th>	
+													<th>마지막 수정날짜</th>
+													<th>생성날짜</th>
+													<th></th>	
+													<th></th>		
+												</tr>
+												<%
+													for(Category c:categoryList) {
+												%>
+													<tr>
+														<td><%=c.getCategoryKind()%></td>
+														<td><%=c.getCategoryName()%></td>
+														<td><%=c.getUpdatedate()%></td>
+														<td><%=c.getCreatedate()%></td>
+														<td>
+															<a href="<%=request.getContextPath()%>/admin/updateCategoryList.jsp?categoryNo=<%=c.getCategoryNo()%>">수정</a>
+														</td>
+														<td>
+															<a href="<%=request.getContextPath()%>/admin/deleteCategoryList.jsp?categoryNo=<%=c.getCategoryNo()%>">삭제</a>
+														</td>
+													</tr>
+												<%
+													}
+												%>
+											</table>
+										</div>
 									
 									
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			
 			
 			</div><!-- End of Main Content -->
 			
@@ -423,7 +460,7 @@
                 	    	<span aria-hidden="true">×</span>
                 		</button>
             		</div>
-            		<div class="modal-body">관리계정에서 로그아웃하시겠습니까?</div>
+            		<div class="modal-body">관리자계정에서 로그아웃하시겠습니까?</div>
             		<div class="modal-footer">
                 		<button class="btn btn-secondary" type="button" data-dismiss="modal">아니오</button>
                 		<a class="btn btn-primary" href="<%=request.getContextPath()%>/logout.jsp">네</a>

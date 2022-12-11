@@ -31,7 +31,7 @@
 				</td>
 			</tr>
 		</table>
-		<button type="submit">등록</button>
+		<button type="submit" class="btn btn-primary">등록</button>
 		<%
 			if(request.getParameter("msg") != null) {
 		%>

@@ -131,7 +131,7 @@
                         <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
                         <h6 class="collapse-header">Diary</h6>
-                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Diary Calendar</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/diary/diaryList.jsp">Diary Calendar</a>
                     </div>
                 </div>
 			</li>
@@ -353,7 +353,7 @@
               					<div class="card-body">
                   <!-- 공지목록-->
 									<div>
-										<table>
+										<table class="table table-borderless">
 											<%
 												for(Notice n: list) {
 													String noticeDate=n.getCreatedate();
@@ -376,20 +376,20 @@
 
 
 			<!-- 최근 가입 회원 리스트-->
-						<div class="col-lg-6 mb-4">
+						<div class="col-lg-4 mb-4">
                				<div class="card shadow mb-4">
                    				<div class="card-header py-3">
                        				<h6 class="m-0 font-weight-bold text-primary">새로운 회원</h6>
                        			</div>
                        			<div class="card-body">
-                           			<table>
+                           			<table class="table table-borderless">
 										<%
 											for(Member m:memberList) {
 										%>
 												<tr>
-													<td>
-														<%=m.getMemberId()%> <%=m.getMemberName()%> <%=m.getCreatedate()%>
-													</td>
+													<td><%=m.getMemberId()%></td>
+													<td><%=m.getMemberName()%></td>
+													<td><%=m.getCreatedate()%></td>
 												</tr>
 										<%
 											}
@@ -434,7 +434,7 @@
                 	    	<span aria-hidden="true">×</span>
                 		</button>
             		</div>
-            		<div class="modal-body">관리계정에서 로그아웃하시겠습니까?</div>
+            		<div class="modal-body">관리자계정에서 로그아웃하시겠습니까?</div>
             		<div class="modal-footer">
                 		<button class="btn btn-secondary" type="button" data-dismiss="modal">아니오</button>
                 		<a class="btn btn-primary" href="<%=request.getContextPath()%>/logout.jsp">네</a>

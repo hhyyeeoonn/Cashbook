@@ -67,7 +67,7 @@ public class MemberDao {
 		ArrayList<Member> memberList = new ArrayList<Member>();
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
-		String sql = "SELECT member_no memberNo, member_id memberId, member_level memberLevel, member_name memberName, createdate, updatedate FROM member ORDER BY createdate DESC LIMIT ?, ?";
+		String sql = "SELECT member_no memberNo, member_id memberId, member_level memberLevel, member_name memberName, createdate, updatedate FROM member ORDER BY member_no DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, beginRow);
 		stmt.setInt(2, rowPerPage);
@@ -92,12 +92,13 @@ public class MemberDao {
 			ArrayList<Member> theMemberList = new ArrayList<Member>();
 			DBUtil dbUtil = new DBUtil();
 			Connection conn = dbUtil.getConnection();
-			String sql = "SELECT member_id memberId, member_level memberLevel, member_name memberName, createdate, updatedate FROM member WHERE member_no=?";
+			String sql = "SELECT member_no memberNo, member_id memberId, member_level memberLevel, member_name memberName, createdate, updatedate FROM member WHERE member_no=?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, memberNo);
 			ResultSet rs= stmt.executeQuery();
 			while(rs.next()) {
 				Member m = new Member();
+				m.setMemberNo(rs.getInt("memberNo"));
 				m.setMemberId(rs.getString("memberId"));
 				m.setMemberLevel(rs.getInt("memberLevel"));
 				m.setMemberName(rs.getString("memberName"));

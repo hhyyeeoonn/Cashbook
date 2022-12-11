@@ -41,7 +41,8 @@ public class DiaryDao {
 			conn = dbUtil.getConnection();
 			String sql = "SELECT diary_no diaryNo,"
 					+ " diary_memo diaryMemo,"
-					+ " diary_date diaryDate"
+					+ " diary_date diaryDate,"
+					+ "	updatedate"
 					+ " FROM diary"
 					+ " WHERE member_id = ?"
 					+ " AND YEAR(diary_date) = ?"
@@ -59,6 +60,7 @@ public class DiaryDao {
 				d.put("diaryNo", rs.getInt("diaryNo"));
 				d.put("diaryMemo", rs.getString("diaryMemo"));
 				d.put("diaryDate", rs.getString("diaryDate"));
+				d.put("updatedate", rs.getString("updatedate"));
 				list.add(d);
 			}
 		} catch(Exception e) {
@@ -157,7 +159,7 @@ public class DiaryDao {
 		PreparedStatement stmt = null;
 		try {
 			String sql="UPDATE diary"
-					+ " SET help_memo=?, updatedate=NOW()"
+					+ " SET diary_memo=?, updatedate=NOW()"
 					+ " WHERE member_id=? AND diary_no=?";
 			dbUtil = new DBUtil();
 			conn = dbUtil.getConnection();

@@ -5,9 +5,9 @@
 <%
 	// Controller
 	Member loginMember = (Member)session.getAttribute("loginMember");
-		System.out.println("insertDiary:session확인");
 	
 	if(loginMember == null) { // 로그인 되지 않은 상태
+		System.out.println("insertDiary:session확인");
 		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
 		return;
 	}	
@@ -16,7 +16,7 @@
 	String year = request.getParameter("year");
 	String month = request.getParameter("month");
 	String date = request.getParameter("date");
-	
+	System.out.println("insertDiary:y:"+year+"/m:"+month+"/d:"+date);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -128,8 +128,8 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="login.html">공지사항</a>
-                        <a class="collapse-item" href="register.html">QnA</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashNoticeList2.jsp">공지사항</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/help/helpList.jsp">QnA</a>
                     </div>
                 </div>
             </li>
@@ -359,7 +359,7 @@
 
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="col-lg-11 mb-4" style = "margin:0 auto;">
+                        <div class="col-lg-8 mb-4" style = "margin:0 auto;">
 
 
 							 <!-- Project Card Example -->
@@ -373,9 +373,9 @@
 	                                 	
 	                                 	<!-- 입력 -->
 										<div>
-											<form action = "<%=request.getContextPath()%>/diary/insertDiaryAction.jsp?year=<%=year%>&month=<%=month+1%>&date=<%=date%>" method = "post">
+											<form action = "<%=request.getContextPath()%>/diary/insertDiaryAction.jsp?year=<%=year%>&month=<%=month%>&date=<%=date%>" method = "post">
 												<input type = "hidden" name = "memberId" value = "<%=loginMember.getMemberId()%>">
-												<table>
+												<table class="table table-borderless">
 													<tr>
 														<td>
 															<input type = "hidden" name="diaryDate" value="<%=year%>-<%=month%>-<%=date%>">
@@ -384,15 +384,15 @@
 													</tr>
 													<tr>
 														<td>
-															<textarea name = "memo"></textarea>
+															<textarea cols="80" rows = "15" name = "memo"></textarea>
 														</td>
 													</tr>
 												</table>
-												<button type = "submit">등록</button>
-												&nbsp;&nbsp;&nbsp;
 												<a href = "<%=request.getContextPath()%>/diary/diaryList.jsp">
-													<button type = "button">달력으로</button>
+													<button type = "button" class="btn btn-primary">달력으로</button>
 												</a>
+												&nbsp;&nbsp;&nbsp;
+												<button type = "submit" class="btn btn-primary">등록</button>												
 											</form>
 										</div> <!-- 입력 끝 -->
 								

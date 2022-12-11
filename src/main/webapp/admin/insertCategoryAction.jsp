@@ -23,7 +23,7 @@
 	*/
 	if((categoryName == null) || (categoryName.equals("")) || (categoryKind == null) || (categoryKind.equals(""))) {
 		String msg=URLEncoder.encode("새로운 카테고리이름을 입력하세요.", "utf-8");
-		response.sendRedirect(request.getContextPath()+"/admin/insertCategoryList.jsp?msg="+msg);
+		response.sendRedirect(request.getContextPath()+"/admin/categoryList.jsp?msg="+msg);
 		return;
 	}
 	

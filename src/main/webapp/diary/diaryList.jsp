@@ -175,8 +175,8 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="login.html">공지사항</a>
-                        <a class="collapse-item" href="register.html">QnA</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashNoticeList2.jsp">공지사항</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/help/helpList.jsp">QnA</a>
                     </div>
                 </div>
             </li>

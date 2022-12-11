@@ -49,7 +49,7 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
+           <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<%=request.getContextPath()%>/cash/cashNoticeList.jsp">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
@@ -85,7 +85,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
+           <!-- Heading -->
             <div class="sidebar-heading">
                 My List
             </div>
@@ -95,12 +95,14 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="far fa-calendar-alt"></i>
-                    <span>Cashbook</span>
+                    <span>Calendar</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
+                        <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
+                        <h6 class="collapse-header">Diary</h6>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/diary/diaryList.jsp">Diary Calendar</a>
                     </div>
                 </div>
             </li>
@@ -110,7 +112,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
+              <!-- Heading -->
             <div class="sidebar-heading">
                 Member Service
             </div>
@@ -120,18 +122,12 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-user-alt"></i>
-                    <span>Pages</span>
+                    <span>고객지원</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashNoticeList2.jsp">공지사항</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/help/helpList.jsp">QnA</a>
                     </div>
                 </div>
             </li>
@@ -361,72 +357,69 @@
 
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="col-lg-6 mb-4">
+                        <div class="col-lg-6 mb-4" style = "margin:0 auto;">
 
 
 							 <!-- Project Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">My Information</h6>
+                           	<div class = "container center-block">
+                           		<div class="card shadow mb-4">
+                        			<div class="card-header py-3">
+                           			<h6 class="m-0 font-weight-bold text-primary">My Information</h6>
+                       				</div>
+                        			<div class="card-body">
+  
+		                                <!-- 내정보 조회 -->
+		                            	<div>
+			                            	<table class="table table-borderless">
+			                                <%
+			                                	for(Member m : myList) {
+			                                		String level = "";
+			                                		if(m.getMemberLevel() == 0) {
+			                                			level = "일반회원";
+			                                		} else {
+			                                			level = "관리자";
+			                                		}
+			                                %>
+			                                	<tr>
+			                                		<th>ID</th>
+			                                		<td><%=m.getMemberId()%></td>
+			                                	</tr>
+			                                	<tr>
+			                                		<th>Name</th>
+			                                		<td><%=m.getMemberName()%></td>
+			                                	</tr>
+			                                	<tr>
+			                                		<th>Level</th>
+			                                		<td><%=level%></td>
+			                                	</tr>
+			                                	<tr>
+			                                		<th>CreateDate</th>
+			                                		<td><%=m.getCreatedate()%></td>
+			                                	</tr>
+			                                <%
+			                                	}
+			                                %>
+			                                </table>
+			                                <a href = "<%=request.getContextPath()%>/updateMemberForm.jsp">
+			                                	<button type = "button" class="btn btn-primary">
+			                                		회원정보수정
+			                                	</button>
+			                                </a>
+			                                &nbsp;&nbsp;&nbsp;
+			                                <a href = "<%=request.getContextPath()%>/deleteMemberForm.jsp">
+			                                	<button type = "button" class="btn btn-primary">
+			                                		회원탈퇴
+			                                	</button>
+			                                </a>
+		                                </div>	
+                               		
+                               		</div>
                                 </div>
-                                <div class="card-body">
-                                
-                                
-                                <!-- 내정보 조회 -->
-                                <table>
-                                <%
-                                	for(Member m : myList) {
-                                		String level = "";
-                                		if(m.getMemberLevel() == 0) {
-                                			level = "일반회원";
-                                		} else {
-                                			level = "관리자";
-                                		}
-                                %>
-                                	<tr>
-                                		<th>ID</th>
-                                		<td><%=m.getMemberId()%></td>
-                                	</tr>
-                                	<tr>
-                                		<th>Name</th>
-                                		<td><%=m.getMemberName()%></td>
-                                	</tr>
-                                	<tr>
-                                		<th>Level</th>
-                                		<td><%=level%></td>
-                                	</tr>
-                                	<tr>
-                                		<th>CreateDate</th>
-                                		<td><%=m.getCreatedate()%></td>
-                                	</tr>
-                                <%
-                                	}
-                                %>
-                                </table>	
-                                	
-                                    
-                                </div>
-                                <button type = "button" onclick = "lacation.href ='<%=request.getRequestURL()%>/updateMemberForm.jsp'">
-                                	회원정보수정
-                                </button>
-                                
                             </div>
+                            
+                            
 						</div>
-							
-						 <div class="col-lg-6 mb-4">
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
-                                </div>
-                                <div class="card-body">
-                                 <!--  -->
-                                </div>
-                            </div>
-
-                        </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 

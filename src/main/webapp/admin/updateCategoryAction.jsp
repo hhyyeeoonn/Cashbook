@@ -12,11 +12,11 @@
 		response.sendRedirect(request.getContextPath()+"/cash/cashList.jsp");
 		return;
 	}
-
+	
 	request.setCharacterEncoding("utf-8");
-	int categoryNo=Integer.parseInt(request.getParameter("categoryNo"));
+	int categoryNo = Integer.parseInt(request.getParameter("categoryNo"));
 	String categoryName=request.getParameter("categoryName");
-	String categoryKind=request.getParameter("categoryKind");
+	String categoryKind=request.getParameter("categoryKind");	
 	
 	Category category=new Category();
 	category.setCategoryNo(categoryNo);

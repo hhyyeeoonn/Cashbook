@@ -132,7 +132,7 @@
                         <h6 class="collapse-header">CashBook</h6>
                         <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Cash Calendar</a>
                         <h6 class="collapse-header">Diary</h6>
-                        <a class="collapse-item" href="<%=request.getContextPath()%>/cash/cashList.jsp">Diary Calendar</a>
+                        <a class="collapse-item" href="<%=request.getContextPath()%>/diary/diaryList.jsp">Diary Calendar</a>
                     </div>
                 </div>
 			</li>
@@ -344,89 +344,111 @@
 <!-- Begin Page Content -->
 				<div class="container-fluid">                   
     <!-- Content Row -->
-					<div class="row">
+					  <div class="col-lg-10 mb-4" style = "margin:0 auto;">
+			
+			
 				<!-- 최근 공지 -->
-      					<div class="col-lg-6 mb-4">
-          					<div class="card shadow mb-4">
-              					<div class="card-header py-3">
-                  					<h6 class="m-0 font-weight-bold text-primary">최근 공지사항</h6>
-              					</div>
-              					<div class="card-body">
+      					<div class = "container center-block">
+                            <div class="card shadow mb-4">
+                        		<div class="card-header py-3">
+                           			<h6 class="m-0 font-weight-bold text-primary">Member List</h6>
+                       			</div>
+                        		<div class="card-body">
+                 
                  
                  <!-- memberList contents... -->
 									<div>
-										<h1>회원목록</h1>
-											<br>
-											<table>
-												<tr>
-													<th>회원번호</th>
-													<th>아이디</th>
-													<th>레벨</th>
-													<th>이름</th>
-													<th>마지막수정날짜</th>
-													<th>생성일자</th>
-													<th></th> <!-- memberNo로 membeLevel 수정 -->
-													<th></th>
-												</tr>
+										<table class="table table-borderless">
+											<tr>
+												<th>회원번호</th>
+												<th>아이디</th>
+												<th>레벨</th>
+												<th>이름</th>
+												<th>마지막수정날짜</th>
+												<th>생성일자</th>
+												<th></th> <!-- memberNo로 membeLevel 수정 -->
+												<th></th>
+											</tr>
+											<%
+												for(Member b:memberList) {
+													String level="관리자";
+													if((b.getMemberLevel()) == 0) {
+														level="일반회원";
+													}
+											%>
+													<tr>
+														<td><%=b.getMemberNo()%></td>
+														<td><%=b.getMemberId()%></td>
+														<td><%=level%></td>
+														<td><%=b.getMemberName()%></td>
+														<td><%=b.getUpdatedate()%></td>
+														<td><%=b.getCreatedate()%></td>
+														<td>
+															<a href="<%=request.getContextPath()%>/admin/updateMemberLevel.jsp?memberNo=<%=b.getMemberNo()%>">등급수정</a>
+														</td>
+														<td>
+															<a href="<%=request.getContextPath()%>/admin/deleteMemberList.jsp?memberNo=<%=b.getMemberNo()%>">회원추방</a>
+														</td>
+													</tr>
+											<%
+												}
+											%>
+										</table>
+									</div>
+									
+									<!-- 페이징 -->
+									<div>
+										<nav aria-label="Page navigation example">
+								 			<ul class="pagination">
 												<%
-													for(Member b:memberList) {
-														String level="관리자";
-														if((b.getMemberLevel()) == 0) {
-															level="일반회원";
-														}
+													if(currentPage > 1) {
 												%>
-														<tr>
-															<td><%=b.getMemberNo()%></td>
-															<td><%=b.getMemberId()%></td>
-															<td><%=level%></td>
-															<td><%=b.getMemberName()%></td>
-															<td><%=b.getUpdatedate()%></td>
-															<td><%=b.getCreatedate()%></td>
-															<td>
-																<a href="<%=request.getContextPath()%>/admin/updateMemberLevel.jsp?memberNo=<%=b.getMemberNo()%>">등급수정</a>
-															</td>
-															<td>
-																<a href="<%=request.getContextPath()%>/admin/deleteMemberList.jsp?memberNo=<%=b.getMemberNo()%>">회원추방</a>
-															</td>
-														</tr>
+													<li class="page-item">
+														<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=1" aria-label="Previous">처음</a>
+													</li>
+													<li class="page-item">
+														<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage-1%>">이전</a>
+													</li>
 												<%
 													}
 												%>
-											</table>
-											<span>
-											<%
-												if(currentPage > 1) {
-											%>
-													<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=1">처음</a>
-													<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage-1%>">이전</a>
-											<%
-												}
-											%>
-										</span>
-										<span><%=currentPage%></span>
-										<span>
-											<%
-												if(currentPage < memberLastPage) { 
-											%>
-													<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage+1%>">다음</a>
-											<%
-												}
-											%>		
-										</span>
-										<span>
-											<%
-												if(currentPage < memberLastPage) {
-											%>
-												<a href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=memberLastPage%>">마지막</a>
-											<%
-												}
-											%>
-										</span>
+													<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage%>"><%=currentPage%></a></li>
+												<%
+													if(currentPage < memberLastPage-1) {
+												%>
+													<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage+1%>"><%=currentPage+1%></a></li>
+													<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage+2%>"><%=currentPage+2%></a></li>
+												<%
+													}
+												%>
+												<li class="page-item">
+												<%
+													if(currentPage < memberLastPage-3) { 
+												%>
+														<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=currentPage+3%>">다음</a>
+												<%
+													}
+												%>
+												</li>
+												<li class="page-item">	
+												<%
+													if(currentPage < memberLastPage) {
+												%>
+													<a class="page-link" href="<%=request.getContextPath()%>/admin/memberList.jsp?currentPage=<%=memberLastPage%>">마지막</a>
+												<%
+													}
+												%>
+												</li>
+											</ul>
+										</nav>
 									</div>
+				
 									
 								</div>	
 							</div>
 						</div>
+
+						
 					</div>
 				</div>
 			
@@ -463,7 +485,7 @@
                 	    	<span aria-hidden="true">×</span>
                 		</button>
             		</div>
-            		<div class="modal-body">관리계정에서 로그아웃하시겠습니까?</div>
+            		<div class="modal-body">관리자계정에서 로그아웃하시겠습니까?</div>
             		<div class="modal-footer">
                 		<button class="btn btn-secondary" type="button" data-dismiss="modal">아니오</button>
                 		<a class="btn btn-primary" href="<%=request.getContextPath()%>/logout.jsp">네</a>
