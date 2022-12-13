@@ -9,65 +9,30 @@
 		response.sendRedirect(request.getContextPath()+"/loginForm.jsp");
 		return;
 	}
-
 	// session안에 저장된 멤버(현재 로그인 사용자) 
 	Member loginMember = (Member)session.getAttribute("loginMember");
 
-
+	int year = 0;
+	if(request.getParameter("year") == null) {
+		Calendar c = Calendar.getInstance();
+		year = c.get(Calendar.YEAR);
+	} else {
+		year = Integer.parseInt(request.getParameter("year"));
+	}
+	
 	int currentPage=1;
 	if(request.getParameter("currentPage") != null) {
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 	}
 	
-	// request 년 + 월
-	int year = 0; 
-	int month = 0;
-		
-	if ((request.getParameter("year") == null) || (request.getParameter("month")) == null) {
-		Calendar today = Calendar.getInstance(); // 오늘날짜
-		year = today.get(Calendar.YEAR);
-		month = today.get(Calendar.MONTH); // 우리가 생각하는 달보다 1 작다
-	} else {
-		year = Integer.parseInt(request.getParameter("year"));
-		month = Integer.parseInt(request.getParameter("month"));
-		// month -> -1, month -> 12일 경우
-		if (month == -1) {
-			month = 11;
-			year -= 1;	
-		}
-		if(month == 12) {
-			month = 0;
-			year += 1;
-		}
-	}
-
-	// 출력하고자 하는 연도와 달과 그 달 1일의 요일 (일=1, 월=2, 화=3,...,토=7)
-	Calendar targetDate = Calendar.getInstance();
-	targetDate.set(Calendar.YEAR, year);
-	targetDate.set(Calendar.MONTH, month);
-	targetDate.set(Calendar.DATE, 1);
-	// firstDay는 1일의 요일
-	int firstDay = targetDate.get(Calendar.DAY_OF_WEEK);
-	// beginBlank 개수는 firstDat-1
 	
-	
-	// 마지막 날짜
-	int lastDate = targetDate.getActualMaximum(Calendar.DATE);	
-	
-	// 달력 출력 테이블의 시작 공백셀(td)과 마지막 공백섹(td)의 개수
-	int beginBlank = firstDay - 1;
-	int endBlank = 0; // 7로 나누어 떨어진다 /beginBlank + lastDate + endBlank = 7
-	if((beginBlank + lastDate) % 7 != 0) {
-		endBlank = 7 - ((beginBlank + lastDate) % 7);
-	}
-	
-	// 전체 td의 개수 : 7로 나누어 떨어져야 한다
-	int totalTd = beginBlank + lastDate + endBlank; 
-	
-	
-	// Model 호출 : 일별 cash 목록
 	CashDao cashDao = new CashDao();
-	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month+1);
+	HashMap<String, Object> map = cashDao.selectMaxMinYear(loginMember);
+	int minYear = (Integer)(map.get("minYear"));
+	int maxYear = (Integer)(map.get("maxYear"));
+	ArrayList<HashMap<String, Object>> monthList = cashDao.selectMonthSumAvg(loginMember, year);
+	ArrayList<HashMap<String, Object>> yearList = cashDao.selectYearSumAvg(loginMember);
+
 %>
 
 
@@ -82,7 +47,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>cashNoticeList</title>
+    <title>cashList</title>
 
     <!-- Custom fonts for this template-->
     <link href="<%=request.getContextPath()%>/Resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -96,14 +61,6 @@
 
 	<style>
  		 
- 		 table, th, td {
-   		 	border: 1px solid #bcbcbc;
-		 }
-  
-  		table {
-    		width: 80%;
-  		}
-	
 	</style>
 
 
@@ -429,10 +386,11 @@
 					
 					<!-- Page Heading -->
  					<div class="row">
- 						<div  class = "container mb-4">
- 							<span class = "float-right">
- 								<a href = "<%=request.getContextPath()%>/cash/cashStats.jsp?year=<%=year%>">
- 									<h10 class="h10 text-gray-800">가계부 연/월별 통계</h10>
+ 						<div class = "container mb-4">
+ 							<span class = "float-left">
+ 								<a href = "<%=request.getContextPath()%>/cash/cashList.jsp">
+ 									<i class='fas fa-angle-left' style='font-size:15px'></i>
+ 									<h10 class="h10 text-gray-800">달력으로</h10>
  								</a>
 							</span>
  						</div>
@@ -447,106 +405,129 @@
 
 							 <!-- Project Card Example -->
 							<div class = "container center-block">
-                            <div class="card shadow mb-4">
-                        		<div class="card-header py-3">
-                           			<h6 class="m-0 font-weight-bold text-primary">Cash Calendar</h6>
-                       			</div>
-                        		<div class="card-body">
-                                 	
-                                 	
-                                 	<!-- 달력 -->
-									<div>	
-										<h6 class="m-0 text-center font-weight-bold text-primary"> <%=year%>년 <%=month + 1%>월</h6>
-									</div>
-									<div>
-										<span class = "float-left">
-											<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month-1%>">
-												<i class='fas fa-angle-left' style='font-size:24px'></i>
-											</a>
-										</span>
-										<span class = "float-right">											
-											<a href="<%=request.getContextPath()%>/cash/cashList.jsp?year=<%=year%>&month=<%=month+1%>">
-												<i class='fas fa-angle-right' style='font-size:24px'></i>
-											</a>
-										</span>						
-									</div>
-									<div>
-										<table class="table table-bordered">
-											<thead>
-												<tr>
-													<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
-												</tr>
-												<tr>
-											</thead>
-											<tbody>
-											<%
-												for (int i=1; i<totalTd; i++) {
-											%>
-													<td>
-											<%
-														int date = i-beginBlank;
-														if(date > 0 && date <= lastDate) {
-											%>
-															<div>
-																<a href="<%=request.getContextPath()%>/cash/cashDateList.jsp?year=<%=year%>&month=<%=month+1%>&date=<%=date%>"><%=date%></a>
-															</div>															
-															<div>
-											<%
-																int cnt = 0;
-																int cnt2 = 0;
-																String money = "수입 : "+cnt+"<br>"+"지출 : "+cnt2;
-																for(HashMap<String, Object> m:list) {
-																	String cashDate=(String)(m.get("cashDate"));
-																	String categoryKind = (String)(m.get("categoryKind"));
-																	if(Integer.parseInt(cashDate.substring(8)) == date) {
-																		if(categoryKind.equals("수입")) {
-																			++cnt;
-																		} else {
-																			++cnt2;
-																		}
-																	}
-																}
-																if(cnt > 0 && cnt2 == 0){
-											%> 
-																			수입 : <%=cnt%>
-																			<br>
-											<%								
-																} else if(cnt == 0 && cnt2 > 0) {
-											%>
-																			지출 : <%=cnt2%>
-																			<br> 
-											<%
-																} else if (cnt > 0 && cnt2 >0) {									
-											%>
-																			수입 : <%=cnt%> <br>
-																			지출 : <%=cnt2%>
-											<% 
-																}
-											%>
-															</div>
-														</td>
-											<% 
+                            	<div class="card shadow mb-4">
+	                        		<div class="card-header py-3">
+	                           			<h6 class="m-0 font-weight-bold text-primary">연도별 내역</h6>
+	                       			</div>
+	                        		<div class="card-body">
+						
+										<!-- 연도별 -->
+										<div>
+											<div>	
+												<table class="table table-bordered">
+													<tr>
+														<th>연도</th>
+														<th>수입</th>
+														<th>수입합계</th>
+														<th>수입평균</th>
+														<th>지출</th>
+														<th>지출합계</th>
+														<th>지출평균</th>	
+													</tr>				
+													<%
+														for(HashMap<String, Object> h : yearList) {
+													%>
+															<tr>
+																<td><%=(Integer)(h.get("연도"))%></td>
+																<td><%=(Integer)(h.get("수입"))%>건</td>
+																<td><%=(Integer)(h.get("수입합계"))%></td>
+																<td><%=(Integer)(h.get("수입평균"))%></td>
+																<td><%=(Integer)(h.get("지출"))%>건</td>
+																<td><%=(Integer)(h.get("지출합계"))%></td>
+																<td><%=(Integer)(h.get("지출평균"))%></td>
+															</tr>
+													<%
 														}
-														if(i % 7 == 0 && i != totalTd) {
-											%>
-															</tr><tr> <!-- td 7개 만들고 테이블 줄바꿈 -->
-											<%
+													%>
+												</table>
+												<div>
+												<!--  
+													<nav aria-label="Page navigation example">
+									 					<ul class="pagination">
+															<li class="page-item"><a class="page-link" href=""></a></li>
+														</ul>
+													</nav>
+												-->
+												</div>
+											</div>
+										</div>
+						
+									</div>
+								</div>
+							</div> <!-- card end -->
+	
+
+							 <!-- Project Card Example -->
+							<div class = "container center-block">
+	                            <div class="card shadow mb-4">
+	                        		<div class="card-header py-3">
+	                           			<h6 class="m-0 font-weight-bold text-primary">월별 내역</h6>
+	                       			</div>
+	                        		<div class="card-body">
+	                                 	
+	                                 	
+	                                 	<!-- 월별 -->
+										<div>
+											<div class = "container center-block">
+												<span class = "float-left">
+												<%
+													if(year > minYear) {
+												%>
+															<a href = "<%=request.getContextPath()%>/cash/cashStats.jsp?year=<%=year-1%>">
+																<i class='fas fa-angle-left' style='font-size:24px'></i>												
+															</a>
+												<%
 													}
-												}
-											%>
-														</tr>
-												<!-- integer는 int의 참조타입(래퍼클래스 박싱 언박싱) int는 기본타입--> 
-											</tbody>
-										</table>
-									</div> <!-- 달력 끝 -->
+												%>
+														<span class="m-0 text-center font-weight-bold text-primary" style='font-size:24px'><%=year%></span>
+												<%
+													if(year < maxYear) {
+												%>
+															<a href = "<%=request.getContextPath()%>/cash/cashStats.jsp?year=<%=year+1%>">
+																<i class='fas fa-angle-right' style='font-size:24px'></i>												
+															</a>
+												<%
+													}
+												%>
+												</span>
+											</div>
 										
-                           		 </div>
-                            
-                           </div>
-                           </div><!-- card -->
+											<div>
+												<table class="table table-bordered">
+													<tr>
+														<th>월</th>
+														<th>수입</th>
+														<th>수입합계</th>
+														<th>수입평균</th>
+														<th>지출</th>
+														<th>지출합계</th>
+														<th>지출평균</th>
+													</tr>	
+												<%
+													for(HashMap<String, Object> m : monthList) {
+													
+												%>
+														<tr>
+															<td><%=(Integer)(m.get("월"))%>월</td>
+															<td><%=(Integer)(m.get("수입"))%>건</td>
+															<td><%=(Integer)(m.get("수입합계"))%></td>
+															<td><%=(Integer)(m.get("수입평균"))%></td>
+															<td><%=(Integer)(m.get("지출"))%>건</td>
+															<td><%=(Integer)(m.get("지출합계"))%></td>
+															<td><%=(Integer)(m.get("지출평균"))%></td>
+														</tr>
+												<%
+													}
+												%>
+												</table>
+											</div>										
+										</div> <!-- 달력 끝 -->
+											
+	                           		</div>
+	                       		</div>
+	                       	</div><!-- card -->
+						
 						</div>
-						
-						
 					</div>
 				</div>
                 <!-- /.container-fluid -->
