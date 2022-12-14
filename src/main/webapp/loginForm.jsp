@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	String msg = request.getParameter("msg");
-	String loginMsg = request.getParameter("loginMsg");	
+	String welcomeSign = request.getParameter("loginMsg");
 %>
 
 <!DOCTYPE html>
@@ -49,6 +49,9 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
+                                    <div>
+                                    	<input type = "hidden" id = "welcomeSign" value = "<%=welcomeSign%>">
+                                    </div>
                                     <%
                                     	if(msg != null) {
                                     %>
@@ -60,20 +63,10 @@
 										</div>
                                     <%
                                     	}
-                                    	if(loginMsg != null) {
-                                    %>
-                                    	<div class="text-center">
-                                    		<div class="alert alert-success alert-dismissible">
-  												<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  												<small>가입을 환영합니다!</small>
-											</div>
-										</div>
-                                    <%
-                                    	}
                                     %>
                                     
                                     
-                                    <form class="user" action="<%=request.getContextPath()%>/loginAction.jsp" method="post">
+                                    <form class="user" action="<%=request.getContextPath()%>/loginAction.jsp" method="post" id = "signinForm">
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 name="memberId" aria-describedby="IdHelp"
@@ -92,7 +85,7 @@
                                             </div>
                                         </div>
                                         -->
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        <button type="button" class="btn btn-primary btn-user btn-block" id = "signinBtn">
                                             Sign in
                                         </button>
                                     </form>
@@ -108,6 +101,29 @@
             </div>
         </div>
     </div>
+
+	<script>
+	
+		let welcomeSign = document.querySelector('#welcomeSign');
+		welcomeSign.addEventListener('load', function(){
+			if(welcomeSign.value == 'enter') {
+				alert('가입을 환영합니다!');
+				//window.location.reload(true);
+				return;
+			}
+		});
+		
+		location.replace('page.html'); 
+	
+	
+		let signinBtn = document.querySelector('#signin');
+		signinBtn.addEventListener('click', function(){
+			
+			
+			let signinForm = document.querySelector('#signininForm');
+			signinForm.submit();
+		});
+	</script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

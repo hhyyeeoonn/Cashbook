@@ -23,7 +23,8 @@
 	}
 		System.out.println("insertLoginAction:입력누락확인");
 	
-	if(pw != pw2 || !pw.equals(pw2)) {
+	if(!pw.equals(pw2)) {
+		//System.out.println("insertLoginAction:pw:"+pw+"/Pw2:"+pw2);
 		//String msg2=URLEncoder.encode("pw", "utf-8");
 		String msg2 = "wrong";
 		response.sendRedirect(request.getContextPath() + "/insertLoginForm.jsp?msg2="+msg2);

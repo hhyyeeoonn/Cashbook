@@ -74,7 +74,7 @@
                             			%>
                             
                             
-                          				<form class="user" action="<%=request.getContextPath()%>/insertLoginAction.jsp" method="post">
+                          				<form class="user" action="<%=request.getContextPath()%>/insertLoginAction.jsp" method="post" id = "signupForm">
                             				<div class="form-group">
                                 				<input type="text" class="form-control form-control-user" name="id" placeholder="User ID">
                                 			</div>
@@ -83,13 +83,13 @@
                                 			</div>
                                	 			<div class="form-group row">
                                     			<div class="col-sm-6 mb-3 mb-sm-0">
-                                        			<input type="password" class="form-control form-control-user" name="pw" placeholder="Password">
+                                        			<input type="password" class="form-control form-control-user" id = "pw" name="pw" placeholder="Password">
                                     			</div>
                                     			<div class="col-sm-6">
-                                        			<input type="password" class="form-control form-control-user" name="pw2" placeholder="Repeat Password">
+                                        			<input type="password" class="form-control form-control-user" id = "pw2" name="pw2" placeholder="Repeat Password">
                                     			</div>
                                 			</div>
-                                			<button type="submit" class="btn btn-primary btn-user btn-block">
+                                			<button type="button" class="btn btn-primary btn-user btn-block" id = "signupBtn">
                                 				sign up
                                 			</button>
                                 			<hr>
@@ -106,6 +106,27 @@
 				</div>
 			</div>
     	</div>
+	
+	<script>
+		let signupBtn = document.querySelector('#signupBtn');
+		signupBtn.addEventListener('click', function(){
+			
+			// 비밀번호 확인
+			let pw = document.querySelector('#pw');
+			let pw2 = document.querySelector('#pw2');
+			if(pw.value == '' || pw2.value == '' || pw.value != pw2.value) {
+				//console.log(pw.value);
+				//console.log(pw2.value);
+				alert('비밀번호를 확인하세요');
+				pw.focus();
+				return;
+			}
+
+			
+			let signupForm = document.querySelector('#signupForm');
+			signupForm.submit(); // action="./insertLoginAction.jsp"
+		});
+	</script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="<%=request.getContextPath()%>/Resources/vendor/jquery/jquery.min.js"></script>
