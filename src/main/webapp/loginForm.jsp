@@ -115,11 +115,11 @@
 		//location.replace('page.html'); 
 	
 	
-		let signinBtn = document.querySelector('#signin');
+		let signinBtn = document.querySelector('#signinBtn');
 		signinBtn.addEventListener('click', function(){
 			
 			
-			let signinForm = document.querySelector('#signininForm');
+			let signinForm = document.querySelector('#signinForm');
 			signinForm.submit();
 		});
 	</script>
